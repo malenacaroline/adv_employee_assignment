@@ -9,14 +9,14 @@ const url =
   "mongodb+srv://malena:123@advfsmalena.q9gdl6b.mongodb.net/?retryWrites=true&w=majority";
 
 // Atlas URL  - replace UUU with user, PPP with password, XXX with hostname
-// const url = 'mongodb+srv://UUU:PPP@cluster0-XXX.mongodb.net/issuetracker?retryWrites=true';
+// const url = 'mongodb+srv://UUU:PPP@cluster0-XXX.mongodb.net/employeetracker?retryWrites=true';
 
 // mLab URL - replace UUU with user, PPP with password, XXX with hostname
-// const url = 'mongodb://UUU:PPP@XXX.mlab.com:33533/issuetracker';
+// const url = 'mongodb://UUU:PPP@XXX.mlab.com:33533/employeetracker';
 
 let db;
 
-let aboutMessage = "Issue Tracker API v1.0";
+let aboutMessage = "Employee Tracker API v1.0";
 
 const GraphQLDate = new GraphQLScalarType({
   name: "GraphQLDate",
@@ -38,23 +38,17 @@ const GraphQLDate = new GraphQLScalarType({
 
 const resolvers = {
   Query: {
-    about: () => aboutMessage,
-    issueList,
+    employeeList,
   },
   Mutation: {
-    setAboutMessage,
-    issueAdd,
+    addEmployee,
   },
   GraphQLDate,
 };
 
-function setAboutMessage(_, { message }) {
-  return (aboutMessage = message);
-}
-
-async function issueList() {
-  const issues = await db.collection("issues").find({}).toArray();
-  return issues;
+async function employeeList() {
+  const employees = await db.collection("employees").find({}).toArray();
+  return employees;
 }
 
 async function getNextSequence(name) {
@@ -68,38 +62,41 @@ async function getNextSequence(name) {
   return result.value.current;
 }
 
-function issueValidate(issue) {
+function employeeValidate(employee) {
   const errors = [];
-  if (issue.title.length < 3) {
-    errors.push('Field "title" must be at least 3 characters long.');
+  if (employee.firstName.length < 2) {
+    errors.push('Field "title" must be at least 2 characters long.');
   }
-  if (issue.status === "Assigned" && !issue.owner) {
-    errors.push('Field "owner" is required when status is "Assigned"');
+  if (employee.lastName.length < 2) {
+    errors.push('Field "title" must be at least 2 characters long.');
+  }
+  if (employee.age < 20 || employee.age > 70) {
+    errors.push('Field "age" must be between 20 and 70');
   }
   if (errors.length > 0) {
     throw new UserInputError("Invalid input(s)", { errors });
   }
 }
 
-async function issueAdd(_, { issue }) {
-  issueValidate(issue);
-  issue.created = new Date();
-  issue.id = await getNextSequence("issues");
+async function addEmployee(_, { employee }) {
+  employeeValidate(employee);
+  employee.id = await getNextSequence("employees");
 
-  const result = await db.collection("issues").insertOne(issue);
-  const savedIssue = await db
-    .collection("issues")
+  const result = await db.collection("employees").insertOne(employee);
+  const savedEmployee = await db
+    .collection("employees")
     .findOne({ _id: result.insertedId });
-  return savedIssue;
+  return savedEmployee;
 }
 
 async function initDb() {
-  const count = await db.collection("issues").estimatedDocumentCount("issues");
+  const count = await db
+    .collection("employees")
+    .estimatedDocumentCount("employees");
   console.log("Count: ", count);
 
-  db.collection("counters").deleteOne({ _id: "issues" });
-  db.collection("counters").insertOne({ _id: "issues", current: count });
-
+  db.collection("counters").deleteOne({ _id: "employees" });
+  db.collection("counters").insertOne({ _id: "employees", current: count });
 }
 
 async function connectToDb() {

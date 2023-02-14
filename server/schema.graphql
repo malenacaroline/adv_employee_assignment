@@ -1,41 +1,56 @@
 scalar GraphQLDate
 
-enum StatusType {
-  New
-  Assigned
-  Fixed
-  Closed
+enum TitleType {
+  Employee
+  Manager
+  Director
+  VP
 }
 
-type Issue {
+enum DepartamentType {
+  IT
+  Marketing
+  HR
+  Engineering
+}
+
+enum EmployeeType {
+  FullTime
+  PartTime
+  Contract
+  Seasonal
+}
+
+type Employee {
   _id: ID!
   id: Int!
-  title: String!
-  status: StatusType!
-  owner: String
-  effort: Int
-  created: GraphQLDate!
-  due: GraphQLDate
+  firstName: String!
+  lastName: String!
+  age: Int!
+  dateOfJoining: GraphQLDate!
+  title: TitleType!
+  department: DepartamentType!
+  type: EmployeeType!
+  status: Boolean!
 }
 
-"Toned down Issue, used as inputs, without server generated values."
-input IssueInputs {
-  title: String!
-  "Optional, if not supplied, will be set to 'New'"
-  status: StatusType = New
-  owner: String
-  effort: Int
-  due: GraphQLDate
+input EmployeeInputs {
+  firstName: String!
+  lastName: String!
+  age: Int!
+  dateOfJoining: GraphQLDate!
+  title: TitleType!
+  department: DepartamentType!
+  type: EmployeeType!
+  status: Boolean!
 }
 
 ##### Top level declarations
 
 type Query {
-  about: String!
-  issueList: [Issue!]!
+  employeeList: [Employee!]!
 }
 
 type Mutation {
-  setAboutMessage(message: String!): String
-  issueAdd(issue: IssueInputs!): Issue!
+  addEmployee(employee: EmployeeInputs!): Employee!
 }
