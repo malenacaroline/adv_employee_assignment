@@ -46,8 +46,9 @@ const resolvers = {
   GraphQLDate,
 };
 
-async function employeeList() {
-  const employees = await db.collection("employees").find({}).toArray();
+async function employeeList(_, { employee }) {
+  console.log(employee);
+  const employees = await db.collection("employees").find(employee).toArray();
   return employees;
 }
 
@@ -93,7 +94,6 @@ async function initDb() {
   const count = await db
     .collection("employees")
     .estimatedDocumentCount("employees");
-  console.log("Count: ", count);
 
   db.collection("counters").deleteOne({ _id: "employees" });
   db.collection("counters").insertOne({ _id: "employees", current: count });

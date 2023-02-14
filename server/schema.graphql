@@ -45,10 +45,20 @@ input EmployeeInputs {
   status: Boolean!
 }
 
+input SearchEmployeeInputs {
+  firstName: String
+  lastName: String
+  age: Int
+  dateOfJoining: GraphQLDate
+  title: TitleType
+  department: DepartamentType
+  type: EmployeeType
+}
+
 ##### Top level declarations
 
 type Query {
-  employeeList: [Employee!]!
+  employeeList(employee: SearchEmployeeInputs): [Employee!]!
 }
 
 type Mutation {
