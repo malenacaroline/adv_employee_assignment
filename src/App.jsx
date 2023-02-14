@@ -6,6 +6,7 @@ function jsonDateReviver(key, value) {
 
 const isNull = (value) => !value;
 
+//Component to create form to search employee(s)
 function EmployeeSearch(props) {
   return (
     <EmployeeForm
@@ -15,22 +16,30 @@ function EmployeeSearch(props) {
   );
 }
 
+//Component to create rows of populating with employee data
 function EmployeeRow(props) {
   const employee = props.employee;
   return (
     <tr>
       <td scope="row">{employee.firstName}</td>
       <td scope="row">{employee.lastName}</td>
-      <td scope="row">{employee.age}</td>
-      <td scope="row">{employee.dateOfJoining.toDateString()}</td>
+      <td scope="row" className="text-center">
+        {employee.age}
+      </td>
+      <td scope="row" className="text-center">
+        {employee.dateOfJoining.toISOString().split("T")[0]}
+      </td>
       <td scope="row">{employee.title}</td>
       <td scope="row">{employee.department}</td>
       <td scope="row">{employee.type}</td>
-      <td scope="row">{employee.status ? 1 : 0}</td>
+      <td scope="row" className="text-center">
+        {employee.status ? 1 : 0}
+      </td>
     </tr>
   );
 }
 
+//Component to create table to show employee data
 function EmployeeTable(props) {
   const employeeRows = props.employees.map((employee) => (
     <EmployeeRow key={employee.id} employee={employee} />
@@ -55,32 +64,34 @@ function EmployeeTable(props) {
   );
 }
 
+// Add is-invalid class when field is invalid
 const addIsInvalid = (id) =>
   document.getElementById(id).classList.add("is-invalid");
 
+// Remove is-invalid class when field is no more invalid
 const removeIsInvalid = (id) =>
   document.getElementById(id).classList.remove("is-invalid");
 
 function EmployeeForm(props) {
   const isAdd = props.actionType === "add";
   const isSearch = props.actionType === "search";
+  const form = document.forms[props.actionType];
 
   function isValid() {
     resetError();
 
     let hasErrors = false;
-    const form = document.forms.formEmployee;
     const firstName = form.firstName.value;
     const lastName = form.lastName.value;
 
-    if (firstName.length < 2 && isAdd) {
+    if (firstName.length < 2) {
       hasErrors = true;
-      addIsInvalid("firstName");
+      addIsInvalid(`${props.actionType}-firstName`);
     }
 
-    if (lastName.length < 2 && isAdd) {
+    if (lastName.length < 2) {
       hasErrors = true;
-      addIsInvalid("lastName");
+      addIsInvalid(`${props.actionType}-lastName`);
     }
 
     return !hasErrors;
@@ -88,11 +99,7 @@ function EmployeeForm(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    // console.log(document.forms.formEmployee.dateOfJoining.value);
-    // var dateformat =
-    //   /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
-    if (!isValid()) return;
-    const form = document.forms.formEmployee;
+    if (isAdd && !isValid()) return;
 
     const employee = {};
     if (!isNull(form.firstName.value))
@@ -108,11 +115,10 @@ function EmployeeForm(props) {
     if (isAdd) employee.status = true;
 
     props.queryEmployee(employee);
-    if(isAdd) resetForm();
+    if (isAdd) resetForm();
   }
 
   function resetForm() {
-    const form = document.forms.formEmployee;
     form.firstName.value = "";
     form.lastName.value = "";
     form.age.value = "";
@@ -124,12 +130,12 @@ function EmployeeForm(props) {
   }
 
   function resetError() {
-    removeIsInvalid("firstName");
-    removeIsInvalid("lastName");
+    removeIsInvalid(`${props.actionType}-firstName`);
+    removeIsInvalid(`${props.actionType}-lastName`);
   }
 
   return (
-    <form name="formEmployee" onSubmit={handleSubmit}>
+    <form name={props.actionType} onSubmit={handleSubmit}>
       <div className="form-group has-danger">
         <label htmlFor="firstName" className="form-label mt-2">
           First Name
@@ -137,7 +143,7 @@ function EmployeeForm(props) {
         <input
           type="text"
           name="firstName"
-          id="firstName"
+          id={`${props.actionType}-firstName`}
           placeholder="John"
           className="form-control"
           required={isAdd}
@@ -153,7 +159,7 @@ function EmployeeForm(props) {
         <input
           type="text"
           name="lastName"
-          id="lastName"
+          id={`${props.actionType}-lastName`}
           placeholder="Smith"
           className="form-control"
           required={isAdd}
@@ -169,14 +175,17 @@ function EmployeeForm(props) {
         <input
           type="number"
           name="age"
-          id="age"
+          id={`${props.actionType}-age`}
           placeholder="35"
           min={20}
           max={70}
           className="form-control"
           required={isAdd}
         />
-        <small id="ageHelp" className="form-text text-muted">
+        <small
+          id={`${props.actionType}-ageHelp`}
+          className="form-text text-muted"
+        >
           Age must be between 20 and 70.
         </small>
       </div>
@@ -187,7 +196,7 @@ function EmployeeForm(props) {
         <input
           type="date"
           name="dateOfJoining"
-          id="dateOfJoining"
+          id={`${props.actionType}-dateOfJoining`}
           placeholder="mm/dd/yyyy"
           className="form-control"
           required={isAdd}
@@ -200,7 +209,7 @@ function EmployeeForm(props) {
         </label>
         <select
           name="title"
-          id="title"
+          id={`${props.actionType}-title`}
           className="form-select"
           aria-label="label for title select"
           required={isAdd}
@@ -218,7 +227,7 @@ function EmployeeForm(props) {
         </label>
         <select
           name="department"
-          id="department"
+          id={`${props.actionType}-department`}
           className="form-select"
           aria-label="label for department select"
           required={isAdd}
@@ -237,7 +246,7 @@ function EmployeeForm(props) {
         </label>
         <select
           name="type"
-          id="type"
+          id={`${props.actionType}-type`}
           className="form-select"
           aria-label="label for type select"
           required={isAdd}
@@ -261,6 +270,7 @@ function EmployeeForm(props) {
   );
 }
 
+//Component to create form to add employee
 function AddEmployee(props) {
   return (
     <EmployeeForm
@@ -270,6 +280,7 @@ function AddEmployee(props) {
   );
 }
 
+//Request to graphql
 async function graphQLFetch(query, variables) {
   try {
     const response = await fetch("/graphql", {
@@ -295,6 +306,7 @@ async function graphQLFetch(query, variables) {
   }
 }
 
+//Component to show final result screen with components and employeee data
 function EmployeeDirectory() {
   const [employees, setEmployees] = React.useState([]);
 

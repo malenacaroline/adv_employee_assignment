@@ -8,19 +8,10 @@ const { MongoClient } = require("mongodb");
 const url =
   "mongodb+srv://malena:123@advfsmalena.q9gdl6b.mongodb.net/?retryWrites=true&w=majority";
 
-// Atlas URL  - replace UUU with user, PPP with password, XXX with hostname
-// const url = 'mongodb+srv://UUU:PPP@cluster0-XXX.mongodb.net/employeetracker?retryWrites=true';
-
-// mLab URL - replace UUU with user, PPP with password, XXX with hostname
-// const url = 'mongodb://UUU:PPP@XXX.mlab.com:33533/employeetracker';
-
 let db;
-
-let aboutMessage = "Employee Tracker API v1.0";
 
 const GraphQLDate = new GraphQLScalarType({
   name: "GraphQLDate",
-  description: "A Date() type in GraphQL as a scalar",
   serialize(value) {
     return value.toISOString();
   },
@@ -47,11 +38,11 @@ const resolvers = {
 };
 
 async function employeeList(_, { employee }) {
-  console.log(employee);
   const employees = await db.collection("employees").find(employee).toArray();
   return employees;
 }
 
+// Generate id dinamically
 async function getNextSequence(name) {
   const result = await db
     .collection("counters")
