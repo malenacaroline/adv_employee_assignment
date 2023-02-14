@@ -1,0 +1,34 @@
+h1 {
+  width: max-content;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.search {
+  background-color: rgb(51, 51, 230);
+  color: #fff;
+  padding: 24px 12px;
+  border-radius: 4px;
+  width: max-content;
+  margin: auto;
+}
+
+.search input, .search select {
+  margin-right: 24px;
+  height: 32px;
+  border-radius: 4px;
+  padding: 4px;
+  outline: 0;
+  border: none;
+  font-size: 16px;
+}
+
+.search button {
+  color:rgb(51, 51, 230);
+  border-radius: 4px;
+  font-weight: 600;
+  border: none;
+  height: 40px;
+  font-size: 16px;
+  padding: 12px;
+}

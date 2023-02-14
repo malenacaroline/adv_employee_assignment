@@ -5,10 +5,27 @@ function jsonDateReviver(key, value) {
   return value;
 }
 
-class IssueFilter extends React.Component {
+class EmployeeSearch extends React.Component {
   render() {
     return (
-      <div>This is a placeholder for the issue filter.</div>
+      <div className="search">
+        <form name="issueAdd" onSubmit={this.handleSubmit}>
+          <input type="text" name="firstname" placeholder="First Name" />
+          <input type="text" name="department" placeholder="Department" />
+          <select
+            name="department"
+            placeholder="Department"
+            aria-label="label for the select"
+          >
+            <option value="IT">IT</option>
+            <option value="Marketing">Marketing</option>
+            <option value="HR">HR</option>
+            <option value="Engineering">Engineering</option>
+          </select>
+          <input type="text" name="type" placeholder="Type" />
+          <button type="submit">Search</button>
+        </form>
+      </div>
     );
   }
 }
@@ -147,8 +164,8 @@ class IssueList extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <h1>Issue Tracker</h1>
-        <IssueFilter />
+        <h1>Employee Management System</h1>
+        <EmployeeSearch />
         <hr />
         <IssueTable issues={this.state.issues} />
         <hr />

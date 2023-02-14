@@ -21,20 +21,51 @@ function jsonDateReviver(key, value) {
   if (dateRegex.test(value)) return new Date(value);
   return value;
 }
-var IssueFilter = /*#__PURE__*/function (_React$Component) {
-  _inherits(IssueFilter, _React$Component);
-  var _super = _createSuper(IssueFilter);
-  function IssueFilter() {
-    _classCallCheck(this, IssueFilter);
+var EmployeeSearch = /*#__PURE__*/function (_React$Component) {
+  _inherits(EmployeeSearch, _React$Component);
+  var _super = _createSuper(EmployeeSearch);
+  function EmployeeSearch() {
+    _classCallCheck(this, EmployeeSearch);
     return _super.apply(this, arguments);
   }
-  _createClass(IssueFilter, [{
+  _createClass(EmployeeSearch, [{
     key: "render",
     value: function render() {
-      return /*#__PURE__*/React.createElement("div", null, "This is a placeholder for the issue filter.");
+      return /*#__PURE__*/React.createElement("div", {
+        className: "search"
+      }, /*#__PURE__*/React.createElement("form", {
+        name: "issueAdd",
+        onSubmit: this.handleSubmit
+      }, /*#__PURE__*/React.createElement("input", {
+        type: "text",
+        name: "firstname",
+        placeholder: "First Name"
+      }), /*#__PURE__*/React.createElement("input", {
+        type: "text",
+        name: "department",
+        placeholder: "Department"
+      }), /*#__PURE__*/React.createElement("select", {
+        name: "department",
+        placeholder: "Department",
+        "aria-label": "label for the select"
+      }, /*#__PURE__*/React.createElement("option", {
+        value: "IT"
+      }, "IT"), /*#__PURE__*/React.createElement("option", {
+        value: "Marketing"
+      }, "Marketing"), /*#__PURE__*/React.createElement("option", {
+        value: "HR"
+      }, "HR"), /*#__PURE__*/React.createElement("option", {
+        value: "Engineering"
+      }, "Engineering")), /*#__PURE__*/React.createElement("input", {
+        type: "text",
+        name: "type",
+        placeholder: "Type"
+      }), /*#__PURE__*/React.createElement("button", {
+        type: "submit"
+      }, "Search")));
     }
   }]);
-  return IssueFilter;
+  return EmployeeSearch;
 }(React.Component);
 function IssueRow(props) {
   var issue = props.issue;
@@ -223,7 +254,7 @@ var IssueList = /*#__PURE__*/function (_React$Component3) {
   }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", null, "Issue Tracker"), /*#__PURE__*/React.createElement(IssueFilter, null), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueTable, {
+      return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", null, "Employee Management System"), /*#__PURE__*/React.createElement(EmployeeSearch, null), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueTable, {
         issues: this.state.issues
       }), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueAdd, {
         createIssue: this.createIssue
