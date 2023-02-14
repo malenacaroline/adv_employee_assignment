@@ -124,8 +124,8 @@ startServer();
 (async function () {
   try {
     await connectToDb();
-    app.listen(3000, function () {
-      console.log("App started on port 3000");
+    app.listen(5000, function () {
+      console.log("App started on port 5000");
     });
   } catch (err) {
     console.log("ERROR:", err);
