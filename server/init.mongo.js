@@ -5,6 +5,7 @@
  *   mongo issuetracker scripts/init.mongo.js
  * Atlas:
  *   mongo mongodb+srv://user:pwd@xxx.mongodb.net/issuetracker scripts/init.mongo.js
+ *   mongod mongodb+srv://malena:123@advfsmalena.q9gdl6b.mongodb.net/?retryWrites=true&w=majority scripts/init.mongo.js
  * MLab:
  *   mongo mongodb://user:pwd@xxx.mlab.com:33533/issuetracker scripts/init.mongo.js
  */

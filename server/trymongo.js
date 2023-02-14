@@ -3,7 +3,7 @@ const { MongoClient } = require("mongodb");
 const url =
   "mongodb+srv://malena:123@advfsmalena.q9gdl6b.mongodb.net/?retryWrites=true&w=majority";
 // const url = "mongodb://localhost/issuetracker";
-
+// mongo "mongodb+srv://malena:123@advfsmalena.q9gdl6b.mongodb.net/?retryWrites=true&w=majority" --username "malena" --password "123" --eval "db.employees.remove({})"
 // Atlas URL  - replace UUU with user, PPP with password, XXX with hostname
 // const url = 'mongodb+srv://UUU:PPP@cluster0-XXX.mongodb.net/issuetracker?retryWrites=true';
 
@@ -12,7 +12,10 @@ const url =
 
 function testWithCallbacks(callback) {
   console.log("\n--- testWithCallbacks ---");
-  const client = new MongoClient(url, { useNewUrlParser: true });
+  const client = new MongoClient(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
   client.connect(function (err, client) {
     if (err) {
       callback(err);

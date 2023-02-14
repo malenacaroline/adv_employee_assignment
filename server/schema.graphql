@@ -28,6 +28,8 @@ input IssueInputs {
   due: GraphQLDate
 }
 
+##### Top level declarations
+
 type Query {
   about: String!
   issueList: [Issue!]!
