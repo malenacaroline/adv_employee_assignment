@@ -1,11 +1,11 @@
-const fs = require("fs");
+const fileSync = require("fs");
 const express = require("express");
 const { ApolloServer, UserInputError } = require("apollo-server-express");
 const { GraphQLScalarType } = require("graphql");
 const { Kind } = require("graphql/language");
 const { MongoClient } = require("mongodb");
 
-const url =
+const dbUrl =
   "mongodb+srv://malena:123@advfsmalena.q9gdl6b.mongodb.net/?retryWrites=true&w=majority";
 
 let db;
@@ -81,6 +81,7 @@ async function addEmployee(_, { employee }) {
   return savedEmployee;
 }
 
+//Initial commands to count employee documents and have the number of the next id
 async function initDb() {
   const count = await db
     .collection("employees")
@@ -91,18 +92,18 @@ async function initDb() {
 }
 
 async function connectToDb() {
-  const client = new MongoClient(url, {
+  const client = new MongoClient(dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
   await client.connect();
-  console.log("Connected to MongoDB at", url);
+  console.log("Connected to MongoDB at", dbUrl);
   db = client.db();
   initDb();
 }
 
 const server = new ApolloServer({
-  typeDefs: fs.readFileSync("./server/schema.graphql", "utf-8"),
+  typeDefs: fileSync.readFileSync("./server/schema.graphql", "utf-8"),
   resolvers,
   formatError: (error) => {
     console.log(error);

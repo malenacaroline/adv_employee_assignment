@@ -1,6 +1,6 @@
-const dateRegex = new RegExp("^\\d\\d\\d\\d-\\d\\d-\\d\\d");
-function jsonDateReviver(key, value) {
-  if (dateRegex.test(value)) return new Date(value);
+const dateCheckRegex = new RegExp("^\\d\\d\\d\\d-\\d\\d-\\d\\d");
+function jsonDateChecker(key, value) {
+  if (dateCheckRegex.test(value)) return new Date(value);
   return value;
 }
 
@@ -53,7 +53,7 @@ function EmployeeTable(props) {
           <th scope="col">Last Name</th>
           <th scope="col">Age</th>
           <th scope="col">Date of Joining</th>
-          <th scope="col">Title</th>
+          <th scope="col">Job Title</th>
           <th scope="col">Department</th>
           <th scope="col">Employee Type</th>
           <th scope="col">Current Status</th>
@@ -205,7 +205,7 @@ function EmployeeForm(props) {
       </div>
       <div className="form-group">
         <label htmlFor="title" className="form-label mt-2">
-          Title
+          Job Title
         </label>
         <select
           name="title"
@@ -270,8 +270,8 @@ function EmployeeForm(props) {
   );
 }
 
-//Component to create form to add employee
-function AddEmployee(props) {
+// Component to create form to add employee
+function EmployeeCreate(props) {
   return (
     <EmployeeForm
       actionType="add"
@@ -289,7 +289,7 @@ async function graphQLFetch(query, variables) {
       body: JSON.stringify({ query, variables }),
     });
     const body = await response.text();
-    const result = JSON.parse(body, jsonDateReviver);
+    const result = JSON.parse(body, jsonDateChecker);
 
     if (result.errors) {
       const error = result.errors[0];
@@ -402,7 +402,7 @@ function EmployeeDirectory() {
               aria-labelledby="add-employee-tab"
               tabIndex="0"
             >
-              <AddEmployee queryEmployee={addEmployee} />
+              <EmployeeCreate queryEmployee={addEmployee} />
             </div>
           </div>
         </div>
@@ -416,4 +416,4 @@ function EmployeeDirectory() {
 
 const element = <EmployeeDirectory />;
 
-ReactDOM.render(element, document.getElementById("contents"));
+ReactDOM.render(element, document.getElementById("employee-contents"));
