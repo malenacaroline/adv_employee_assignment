@@ -1,5 +1,4 @@
 const fs = require("fs");
-
 const express = require("express");
 const { ApolloServer, UserInputError } = require("apollo-server-express");
 const { GraphQLScalarType } = require("graphql");
@@ -16,6 +15,8 @@ const url =
 // const url = 'mongodb://UUU:PPP@XXX.mlab.com:33533/issuetracker';
 
 let db;
+
+let aboutMessage = "Issue Tracker API v1.0";
 
 const GraphQLDate = new GraphQLScalarType({
   name: "GraphQLDate",
@@ -34,29 +35,6 @@ const GraphQLDate = new GraphQLScalarType({
     }
   },
 });
-
-let aboutMessage = "Issue Tracker API v1.0";
-
-// const issuesDB = [
-//   {
-//     id: 1,
-//     status: "New",
-//     owner: "Ravan",
-//     effort: 5,
-//     created: new Date("2019-01-15"),
-//     due: undefined,
-//     title: "Error in console when clicking Add",
-//   },
-//   {
-//     id: 2,
-//     status: "Assigned",
-//     owner: "Eddie",
-//     effort: 14,
-//     created: new Date("2019-01-16"),
-//     due: new Date("2019-02-01"),
-//     title: "Missing bottom border on panel",
-//   },
-// ];
 
 const resolvers = {
   Query: {
@@ -77,13 +55,6 @@ function setAboutMessage(_, { message }) {
 async function issueList() {
   const issues = await db.collection("issues").find({}).toArray();
   return issues;
-}
-
-async function connectToDb() {
-  const client = new MongoClient(url, { useNewUrlParser: true });
-  await client.connect();
-  console.log("Connected to MongoDB at", url);
-  db = client.db();
 }
 
 async function getNextSequence(name) {
@@ -122,6 +93,26 @@ async function issueAdd(_, { issue }) {
   return savedIssue;
 }
 
+async function initDb() {
+  const count = await db.collection("issues").estimatedDocumentCount("issues");
+  console.log("Count: ", count);
+
+  db.collection("counters").deleteOne({ _id: "issues" });
+  db.collection("counters").insertOne({ _id: "issues", current: count });
+
+}
+
+async function connectToDb() {
+  const client = new MongoClient(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+  await client.connect();
+  console.log("Connected to MongoDB at", url);
+  db = client.db();
+  initDb();
+}
+
 const server = new ApolloServer({
   typeDefs: fs.readFileSync("./server/schema.graphql", "utf-8"),
   resolvers,
@@ -135,10 +126,19 @@ const app = express();
 
 app.use(express.static("public"));
 
-server.start().then(() => {
-  server.applyMiddleware({ app, path: "/graphql" });
-  connectToDb();
-  app.listen(4000, function () {
-    console.log("App started on port 4000");
-  });
-});
+async function startServer() {
+  await server.start();
+  server.applyMiddleware({ app });
+}
+startServer();
+
+(async function () {
+  try {
+    await connectToDb();
+    app.listen(3000, function () {
+      console.log("App started on port 3000");
+    });
+  } catch (err) {
+    console.log("ERROR:", err);
+  }
+})();

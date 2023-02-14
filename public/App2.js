@@ -16,29 +16,60 @@ function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) ===
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-var dateRegex = new RegExp("^\\d\\d\\d\\d-\\d\\d-\\d\\d");
+var dateRegex = new RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d');
 function jsonDateReviver(key, value) {
   if (dateRegex.test(value)) return new Date(value);
   return value;
 }
-var IssueFilter = /*#__PURE__*/function (_React$Component) {
-  _inherits(IssueFilter, _React$Component);
-  var _super = _createSuper(IssueFilter);
-  function IssueFilter() {
-    _classCallCheck(this, IssueFilter);
+var EmployeeSearch = /*#__PURE__*/function (_React$Component) {
+  _inherits(EmployeeSearch, _React$Component);
+  var _super = _createSuper(EmployeeSearch);
+  function EmployeeSearch() {
+    _classCallCheck(this, EmployeeSearch);
     return _super.apply(this, arguments);
   }
-  _createClass(IssueFilter, [{
+  _createClass(EmployeeSearch, [{
     key: "render",
     value: function render() {
-      return /*#__PURE__*/React.createElement("div", null, "This is a placeholder for the issue filter.");
+      return /*#__PURE__*/React.createElement("div", {
+        className: "search"
+      }, /*#__PURE__*/React.createElement("form", {
+        name: "issueAdd",
+        onSubmit: this.handleSubmit
+      }, /*#__PURE__*/React.createElement("input", {
+        type: "text",
+        name: "firstname",
+        placeholder: "First Name"
+      }), /*#__PURE__*/React.createElement("input", {
+        type: "text",
+        name: "department",
+        placeholder: "Department"
+      }), /*#__PURE__*/React.createElement("select", {
+        name: "department",
+        placeholder: "Department",
+        "aria-label": "label for the select"
+      }, /*#__PURE__*/React.createElement("option", {
+        value: "IT"
+      }, "IT"), /*#__PURE__*/React.createElement("option", {
+        value: "Marketing"
+      }, "Marketing"), /*#__PURE__*/React.createElement("option", {
+        value: "HR"
+      }, "HR"), /*#__PURE__*/React.createElement("option", {
+        value: "Engineering"
+      }, "Engineering")), /*#__PURE__*/React.createElement("input", {
+        type: "text",
+        name: "type",
+        placeholder: "Type"
+      }), /*#__PURE__*/React.createElement("button", {
+        type: "submit"
+      }, "Search")));
     }
   }]);
-  return IssueFilter;
+  return EmployeeSearch;
 }(React.Component);
 function IssueRow(props) {
   var issue = props.issue;
-  return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, issue.id), /*#__PURE__*/React.createElement("td", null, issue.status), /*#__PURE__*/React.createElement("td", null, issue.owner), /*#__PURE__*/React.createElement("td", null, issue.created.toDateString()), /*#__PURE__*/React.createElement("td", null, issue.effort), /*#__PURE__*/React.createElement("td", null, issue.due ? issue.due.toDateString() : ""), /*#__PURE__*/React.createElement("td", null, issue.title));
+  return /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, issue.id), /*#__PURE__*/React.createElement("td", null, issue.status), /*#__PURE__*/React.createElement("td", null, issue.owner), /*#__PURE__*/React.createElement("td", null, issue.created.toDateString()), /*#__PURE__*/React.createElement("td", null, issue.effort), /*#__PURE__*/React.createElement("td", null, issue.due ? issue.due.toDateString() : ''), /*#__PURE__*/React.createElement("td", null, issue.title));
 }
 function IssueTable(props) {
   var issueRows = props.issues.map(function (issue) {
@@ -94,60 +125,53 @@ var IssueAdd = /*#__PURE__*/function (_React$Component2) {
   }]);
   return IssueAdd;
 }(React.Component);
-function graphQLFetch(_x) {
+function graphQLFetch(_x, _x2) {
   return _graphQLFetch.apply(this, arguments);
 }
 function _graphQLFetch() {
-  _graphQLFetch = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(query) {
-    var variables,
-      response,
-      body,
-      result,
-      error,
-      details,
-      _args3 = arguments;
+  _graphQLFetch = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(query, variables) {
+    var response, body, result, error, details;
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
-          variables = _args3.length > 1 && _args3[1] !== undefined ? _args3[1] : {};
-          _context3.prev = 1;
-          _context3.next = 4;
-          return fetch("/graphql", {
-            method: "POST",
+          _context3.prev = 0;
+          _context3.next = 3;
+          return fetch('/graphql', {
+            method: 'POST',
             headers: {
-              "Content-Type": "application/json"
+              'Content-Type': 'application/json'
             },
             body: JSON.stringify({
               query: query,
               variables: variables
             })
           });
-        case 4:
+        case 3:
           response = _context3.sent;
-          _context3.next = 7;
+          _context3.next = 6;
           return response.text();
-        case 7:
+        case 6:
           body = _context3.sent;
           result = JSON.parse(body, jsonDateReviver);
           if (result.errors) {
             error = result.errors[0];
-            if (error.extensions.code == "BAD_USER_INPUT") {
-              details = error.extensions.exception.errors.join("\n ");
+            if (error.extensions.code == 'BAD_USER_INPUT') {
+              details = error.extensions.exception.errors.join('\n ');
               alert("".concat(error.message, ":\n ").concat(details));
             } else {
               alert("".concat(error.extensions.code, ": ").concat(error.message));
             }
           }
           return _context3.abrupt("return", result.data);
-        case 13:
-          _context3.prev = 13;
-          _context3.t0 = _context3["catch"](1);
+        case 12:
+          _context3.prev = 12;
+          _context3.t0 = _context3["catch"](0);
           alert("Error in sending data to server: ".concat(_context3.t0.message));
-        case 16:
+        case 15:
         case "end":
           return _context3.stop();
       }
-    }, _callee3, null, [[1, 13]]);
+    }, _callee3, null, [[0, 12]]);
   }));
   return _graphQLFetch.apply(this, arguments);
 }
@@ -222,7 +246,7 @@ var IssueList = /*#__PURE__*/function (_React$Component3) {
           }
         }, _callee2, this);
       }));
-      function createIssue(_x2) {
+      function createIssue(_x3) {
         return _createIssue.apply(this, arguments);
       }
       return createIssue;
@@ -230,7 +254,7 @@ var IssueList = /*#__PURE__*/function (_React$Component3) {
   }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", null, "Issue Tracker"), /*#__PURE__*/React.createElement(IssueFilter, null), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueTable, {
+      return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", null, "Employee Management System"), /*#__PURE__*/React.createElement(EmployeeSearch, null), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueTable, {
         issues: this.state.issues
       }), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueAdd, {
         createIssue: this.createIssue
@@ -240,4 +264,4 @@ var IssueList = /*#__PURE__*/function (_React$Component3) {
   return IssueList;
 }(React.Component);
 var element = /*#__PURE__*/React.createElement(IssueList, null);
-ReactDOM.render(element, document.getElementById("contents"));
+ReactDOM.render(element, document.getElementById('contents'));
