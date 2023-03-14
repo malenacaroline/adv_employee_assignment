@@ -2,14 +2,14 @@ const dateCheckRegex = new RegExp("^\\d\\d\\d\\d-\\d\\d-\\d\\d");
 const jsonDateChecker = (key, value) => {
   if (dateCheckRegex.test(value)) return new Date(value);
   return value;
-}
+};
 
 const isNull = (value) => !value;
 
 //Component to create form to search employee(s)
 class EmployeeSearch extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
   render() {
     return (
@@ -24,7 +24,7 @@ class EmployeeSearch extends React.Component {
 //Component to create rows of populating with employee data
 class EmployeeRow extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   // const employee = this.props.employee;
@@ -58,8 +58,8 @@ class EmployeeTable extends React.Component {
 
   getTableRows = () => {
     return this.props.employees.map((employee) => (
-        <EmployeeRow key={employee.id} employee={employee} />
-      ));
+      <EmployeeRow key={employee.id} employee={employee} />
+    ));
   };
 
   render() {
@@ -97,8 +97,7 @@ class EmployeeForm extends React.Component {
     this.state = {
       isAdd: this.props.actionType === "add",
       isSearch: this.props.actionType === "search",
-      form: document.getElementById("search")
-    }
+    };
 
     this.isValid = this.isValid.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -128,20 +127,24 @@ class EmployeeForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log(this.state);
+    const form = document.forms[this.props.actionType];
     if (this.state.isAdd && !isValid()) return;
 
     const employee = {};
-    if (!isNull(this.state.form.firstName.value))
-      employee.firstName = this.state.form.firstName.value;
-    if (!isNull(this.state.form.lastName.value)) employee.lastName = this.state.form.lastName.value;
-    if (!isNull(this.state.form.age.value)) employee.age = Number(form.age.value);
-    if (!isNull(this.state.form.dateOfJoining.value))
-      employee.dateOfJoining = new Date(this.state.form.dateOfJoining.value);
-    if (!isNull(this.state.form.title.value)) employee.title = this.state.form.title.value;
-    if (!isNull(this.state.form.department.value))
-      employee.department = this.state.form.department.value;
-    if (!isNull(this.state.form.type.value)) employee.type = this.state.form.type.value;
+    if (!isNull(form.firstName.value))
+      employee.firstName = form.firstName.value;
+    if (!isNull(form.lastName.value))
+      employee.lastName = form.lastName.value;
+    if (!isNull(form.age.value))
+      employee.age = Number(form.age.value);
+    if (!isNull(form.dateOfJoining.value))
+      employee.dateOfJoining = new Date(form.dateOfJoining.value);
+    if (!isNull(form.title.value))
+      employee.title = form.title.value;
+    if (!isNull(form.department.value))
+      employee.department = form.department.value;
+    if (!isNull(form.type.value))
+      employee.type = form.type.value;
     if (this.state.isAdd) employee.status = true;
 
     this.props.queryEmployee(employee);
@@ -149,19 +152,20 @@ class EmployeeForm extends React.Component {
   }
 
   resetForm() {
-    this.state.form.firstName.value = "";
-    this.state.form.lastName.value = "";
-    this.state.form.age.value = "";
-    this.state.form.dateOfJoining.value = "";
-    this.state.form.title.value = this.state.formisAdd ? "Employee" : "";
-    this.state.form.department.value = this.state.formisAdd ? "IT" : "";
-    this.state.form.type.value = this.state.formisAdd ? "FullTime" : "";
+    const form = document.forms[this.props.actionType];
+    form.firstName.value = "";
+    form.lastName.value = "";
+    form.age.value = "";
+    form.dateOfJoining.value = "";
+    form.title.value = this.state.isAdd ? "Employee" : "";
+    form.department.value = this.state.isAdd ? "IT" : "";
+    form.type.value = this.state.isAdd ? "FullTime" : "";
     resetError();
   }
 
   resetError() {
-    removeIsInvalid(`${props.actionType}-firstName`);
-    removeIsInvalid(`${props.actionType}-lastName`);
+    removeIsInvalid(`${this.props.actionType}-firstName`);
+    removeIsInvalid(`${this.props.actionType}-lastName`);
   }
 
   render() {
@@ -309,7 +313,7 @@ class EmployeeForm extends React.Component {
 // Component to create form to add employee
 class EmployeeCreate extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
   render() {
     return (
