@@ -106,11 +106,12 @@ class EmployeeForm extends React.Component {
   }
 
   isValid() {
-    resetError();
+    this.resetError();
 
     let hasErrors = false;
-    const firstName = this.state.form.firstName.value;
-    const lastName = this.state.form.lastName.value;
+    const form = document.forms[this.props.actionType];
+    const firstName = form.firstName.value;
+    const lastName = form.lastName.value;
 
     if (firstName.length < 2) {
       hasErrors = true;
@@ -128,7 +129,7 @@ class EmployeeForm extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const form = document.forms[this.props.actionType];
-    if (this.state.isAdd && !isValid()) return;
+    if (this.state.isAdd && !this.isValid()) return;
 
     const employee = {};
     if (!isNull(form.firstName.value))
@@ -148,7 +149,7 @@ class EmployeeForm extends React.Component {
     if (this.state.isAdd) employee.status = true;
 
     this.props.queryEmployee(employee);
-    if (this.state.isAdd) resetForm();
+    if (this.state.isAdd) this.resetForm();
   }
 
   resetForm() {
@@ -160,7 +161,7 @@ class EmployeeForm extends React.Component {
     form.title.value = this.state.isAdd ? "Employee" : "";
     form.department.value = this.state.isAdd ? "IT" : "";
     form.type.value = this.state.isAdd ? "FullTime" : "";
-    resetError();
+    this.resetError();
   }
 
   resetError() {
@@ -352,14 +353,20 @@ async function graphQLFetch(query, variables) {
 }
 
 //Component to show final result screen with components and employeee data
-function EmployeeDirectory() {
-  const [employees, setEmployees] = React.useState([]);
+class EmployeeDirectory extends React.Component {
 
-  React.useEffect(() => {
-    loadData();
-  }, []);
+   constructor() {
+    super();
+    this.state = { employees: [] };
+    this.loadData = this.loadData.bind(this);
+    this.addEmployee = this.addEmployee.bind(this);
+  }
 
-  async function loadData(employee) {
+  componentDidMount() {
+    this.loadData();
+  }
+
+  async loadData(employee) {
     const query = `query Employees($employee: SearchEmployeeInputs){
         employeeList(employee: $employee) {
           id
@@ -375,10 +382,10 @@ function EmployeeDirectory() {
     }`;
 
     const data = await graphQLFetch(query, { employee });
-    if (data) setEmployees(data.employeeList);
+    if (data) this.setState({employees: data.employeeList});
   }
 
-  async function addEmployee(employee) {
+  async addEmployee(employee) {
     const query = `mutation addEmployee($employee: EmployeeInputs!) {
        addEmployee(employee: $employee) {
         id
@@ -386,77 +393,78 @@ function EmployeeDirectory() {
     }`;
 
     const data = await graphQLFetch(query, { employee });
-    if (data) loadData();
+    if (data) this.loadData();
   }
-
-  return (
-    <React.Fragment>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-5">
-        <div className="container justify-content-center">
-          <a className="navbar-brand" href="#">
-            <strong>Employee Management System</strong>
-          </a>
-        </div>
-      </nav>
-      <div className="container d-flex">
-        <div className="col-md-3">
-          <ul className="nav nav-tabs" id="myTab" role="tablist">
-            <li className="nav-item" role="presentation">
-              <button
-                className="nav-link active"
-                id="search-employee-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#search-employee-tab-pane"
-                type="button"
-                role="tab"
-                aria-controls="search-employee-tab-pane"
-                aria-selected="true"
+  render() {
+    return (
+      <React.Fragment>
+        <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-5">
+          <div className="container justify-content-center">
+            <a className="navbar-brand" href="#">
+              <strong>Employee Management System</strong>
+            </a>
+          </div>
+        </nav>
+        <div className="container d-flex">
+          <div className="col-md-3">
+            <ul className="nav nav-tabs" id="myTab" role="tablist">
+              <li className="nav-item" role="presentation">
+                <button
+                  className="nav-link active"
+                  id="search-employee-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#search-employee-tab-pane"
+                  type="button"
+                  role="tab"
+                  aria-controls="search-employee-tab-pane"
+                  aria-selected="true"
+                >
+                  Search
+                </button>
+              </li>
+              <li className="nav-item" role="presentation">
+                <button
+                  className="nav-link"
+                  id="add-employee-tab"
+                  data-bs-toggle="tab"
+                  data-bs-target="#add-employee-tab-pane"
+                  type="button"
+                  role="tab"
+                  aria-controls="add-employee-tab-pane"
+                  aria-selected="false"
+                >
+                  Add
+                </button>
+              </li>
+            </ul>
+            <div className="tab-content pe-3" id="myTabContent">
+              <div
+                className="tab-pane show active"
+                id="search-employee-tab-pane"
+                role="tabpanel"
+                aria-labelledby="search-employee-tab"
+                tabIndex="0"
               >
-                Search
-              </button>
-            </li>
-            <li className="nav-item" role="presentation">
-              <button
-                className="nav-link"
-                id="add-employee-tab"
-                data-bs-toggle="tab"
-                data-bs-target="#add-employee-tab-pane"
-                type="button"
-                role="tab"
-                aria-controls="add-employee-tab-pane"
-                aria-selected="false"
+                <EmployeeSearch queryEmployee={this.loadData} />
+              </div>
+              <div
+                className="tab-pane"
+                id="add-employee-tab-pane"
+                role="tabpanel"
+                aria-labelledby="add-employee-tab"
+                tabIndex="0"
               >
-                Add
-              </button>
-            </li>
-          </ul>
-          <div className="tab-content pe-3" id="myTabContent">
-            <div
-              className="tab-pane show active"
-              id="search-employee-tab-pane"
-              role="tabpanel"
-              aria-labelledby="search-employee-tab"
-              tabIndex="0"
-            >
-              <EmployeeSearch queryEmployee={loadData} />
-            </div>
-            <div
-              className="tab-pane"
-              id="add-employee-tab-pane"
-              role="tabpanel"
-              aria-labelledby="add-employee-tab"
-              tabIndex="0"
-            >
-              <EmployeeCreate queryEmployee={addEmployee} />
+                <EmployeeCreate queryEmployee={this.addEmployee} />
+              </div>
             </div>
           </div>
+          <div className="col-md-9">
+            <EmployeeTable employees={this.state.employees} />
+          </div>
         </div>
-        <div className="col-md-9">
-          <EmployeeTable employees={employees} />
-        </div>
-      </div>
-    </React.Fragment>
-  );
+      </React.Fragment>
+    );
+  }
 }
 
 const element = <EmployeeDirectory />;
