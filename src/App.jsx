@@ -33,16 +33,16 @@ class EmployeeRow extends React.Component {
       <tr>
         <td scope="row">{this.props.employee.firstName}</td>
         <td scope="row">{this.props.employee.lastName}</td>
-        <td scope="row" className="text-center">
+        <td scope="row">
           {this.props.employee.age}
         </td>
-        <td scope="row" className="text-center">
+        <td scope="row">
           {this.props.employee.dateOfJoining.toISOString().split("T")[0]}
         </td>
         <td scope="row">{this.props.employee.title}</td>
         <td scope="row">{this.props.employee.department}</td>
         <td scope="row">{this.props.employee.type}</td>
-        <td scope="row" className="text-center">
+        <td scope="row">
           {this.props.employee.status ? 1 : 0}
         </td>
       </tr>
@@ -64,20 +64,18 @@ class EmployeeTable extends React.Component {
 
   render() {
     return (
-      <table className="table table-hover table-bordered">
-        <thead className="text-center">
-          <tr className="table-primary">
-            <th scope="col">First Name</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">Age</th>
-            <th scope="col">Date of Joining</th>
-            <th scope="col">Job Title</th>
-            <th scope="col">Department</th>
-            <th scope="col">Employee Type</th>
-            <th scope="col">Current Status</th>
-          </tr>
-        </thead>
-        <tbody>{this.getTableRows()}</tbody>
+      <table>
+        <tr>
+          <th scope="col">First Name</th>
+          <th scope="col">Last Name</th>
+          <th scope="col">Age</th>
+          <th scope="col">Date of Joining</th>
+          <th scope="col">Job Title</th>
+          <th scope="col">Department</th>
+          <th scope="col">Employee Type</th>
+          <th scope="col">Current Status</th>
+        </tr>
+        {this.getTableRows()}
       </table>
     );
   }
@@ -176,8 +174,8 @@ class EmployeeForm extends React.Component {
         id={this.props.actionType}
         onSubmit={this.handleSubmit}
       >
-        <div className="form-group has-danger">
-          <label htmlFor="firstName" className="form-label mt-2">
+        <div>
+          <label htmlFor="firstName">
             First Name
           </label>
           <input
@@ -185,15 +183,14 @@ class EmployeeForm extends React.Component {
             name="firstName"
             id={`${this.props.actionType}-firstName`}
             placeholder="John"
-            className="form-control"
             required={this.state.isAdd}
           />
-          <div className="invalid-feedback">
+          <div>
             Must be be at least 2 characters.
           </div>
         </div>
-        <div className="form-group has-danger">
-          <label htmlFor="lastName" className="form-label mt-2">
+        <div>
+          <label htmlFor="lastName">
             Last Name
           </label>
           <input
@@ -201,15 +198,14 @@ class EmployeeForm extends React.Component {
             name="lastName"
             id={`${this.props.actionType}-lastName`}
             placeholder="Smith"
-            className="form-control"
             required={this.state.isAdd}
           />
-          <div className="invalid-feedback">
+          <div>
             Must be be at least 2 characters.
           </div>
         </div>
-        <div className="form-group">
-          <label htmlFor="age" className="form-label mt-2">
+        <div>
+          <label htmlFor="age">
             Age
           </label>
           <input
@@ -219,18 +215,16 @@ class EmployeeForm extends React.Component {
             placeholder="35"
             min={20}
             max={70}
-            className="form-control"
             required={this.state.isAdd}
           />
           <small
             id={`${this.props.actionType}-ageHelp`}
-            className="form-text text-muted"
           >
             Age must be between 20 and 70.
           </small>
         </div>
-        <div className="form-group has-danger">
-          <label htmlFor="dateOfJoining" className="form-label mt-2">
+        <div>
+          <label htmlFor="dateOfJoining">
             Date of Joining
           </label>
           <input
@@ -238,19 +232,17 @@ class EmployeeForm extends React.Component {
             name="dateOfJoining"
             id={`${this.props.actionType}-dateOfJoining`}
             placeholder="mm/dd/yyyy"
-            className="form-control"
             required={this.state.isAdd}
           />
-          <div className="invalid-feedback">Invalid date.</div>
+          <div>Invalid date.</div>
         </div>
-        <div className="form-group">
-          <label htmlFor="title" className="form-label mt-2">
+        <div>
+          <label htmlFor="title">
             Job Title
           </label>
           <select
             name="title"
             id={`${this.props.actionType}-title`}
-            className="form-select"
             aria-label="label for title select"
             required={this.state.isAdd}
           >
@@ -261,14 +253,13 @@ class EmployeeForm extends React.Component {
             <option value="VP">VP</option>
           </select>
         </div>
-        <div className="form-group">
-          <label htmlFor="department" className="form-label mt-2">
+        <div>
+          <label htmlFor="department">
             Department
           </label>
           <select
             name="department"
             id={`${this.props.actionType}-department`}
-            className="form-select"
             aria-label="label for department select"
             required={this.state.isAdd}
           >
@@ -280,14 +271,13 @@ class EmployeeForm extends React.Component {
           </select>
         </div>
 
-        <div className="form-group">
-          <label htmlFor="type" className="form-label mt-2">
+        <div>
+          <label htmlFor="type">
             Employee Type
           </label>
           <select
             name="type"
             id={`${this.props.actionType}-type`}
-            className="form-select"
             aria-label="label for type select"
             required={this.state.isAdd}
           >
@@ -299,9 +289,8 @@ class EmployeeForm extends React.Component {
           </select>
         </div>
 
-        <div className="d-grid gap-2">
+        <div>
           <input
-            className="btn btn-primary mt-3 full"
             type="submit"
             value={this.state.isAdd ? "Add Employee" : "Search Employee"}
           />
@@ -398,19 +387,12 @@ class EmployeeDirectory extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-5">
-          <div className="container justify-content-center">
-            <a className="navbar-brand" href="#">
-              <strong>Employee Management System</strong>
-            </a>
-          </div>
-        </nav>
-        <div className="container d-flex">
-          <div className="col-md-3">
-            <ul className="nav nav-tabs" id="myTab" role="tablist">
-              <li className="nav-item" role="presentation">
+        <h1>Employee Management System</h1>
+        <div>
+          <div>
+            <ul>
+              <li>
                 <button
-                  className="nav-link active"
                   id="search-employee-tab"
                   data-bs-toggle="tab"
                   data-bs-target="#search-employee-tab-pane"
@@ -422,9 +404,8 @@ class EmployeeDirectory extends React.Component {
                   Search
                 </button>
               </li>
-              <li className="nav-item" role="presentation">
+              <li>
                 <button
-                  className="nav-link"
                   id="add-employee-tab"
                   data-bs-toggle="tab"
                   data-bs-target="#add-employee-tab-pane"
@@ -437,9 +418,8 @@ class EmployeeDirectory extends React.Component {
                 </button>
               </li>
             </ul>
-            <div className="tab-content pe-3" id="myTabContent">
+            <div id="myTabContent">
               <div
-                className="tab-pane show active"
                 id="search-employee-tab-pane"
                 role="tabpanel"
                 aria-labelledby="search-employee-tab"
@@ -448,7 +428,6 @@ class EmployeeDirectory extends React.Component {
                 <EmployeeSearch queryEmployee={this.loadData} />
               </div>
               <div
-                className="tab-pane"
                 id="add-employee-tab-pane"
                 role="tabpanel"
                 aria-labelledby="add-employee-tab"
@@ -458,7 +437,7 @@ class EmployeeDirectory extends React.Component {
               </div>
             </div>
           </div>
-          <div className="col-md-9">
+          <div>
             <EmployeeTable employees={this.state.employees} />
           </div>
         </div>
