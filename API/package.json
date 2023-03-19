@@ -1,21 +1,28 @@
 {
-  "name": "malena_aguiar_assignment1",
+  "name": "malena_aguiar_assignment2",
   "version": "1.0.0",
-  "description": "Advanced Full Stack - Assignment 1",
+  "description": "Advanced Full Stack - Assignment 2",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -e js,graphql server.js",
+    "start": "nodemon -e js,graphql -w . -w .env server.js",
     "compile": "babel src --out-dir public",
     "watch": "babel src --out-dir public --watch --verbose",
+    "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Malena Caroline de Moraes Assuncao Aguiar - 8793442",
   "license": "ISC",
   "dependencies": {
     "apollo-server-express": "^3.11.1",
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "graphql": "^16.6.0",
     "mongodb": "^3.7.3",
     "nodemon": "^2.0.20"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.27.5"
   }
 }

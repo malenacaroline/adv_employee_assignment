@@ -1,12 +1,12 @@
 const fileSync = require("fs");
+require("dotenv").config();
 const express = require("express");
 const { ApolloServer, UserInputError } = require("apollo-server-express");
 const { GraphQLScalarType } = require("graphql");
 const { Kind } = require("graphql/language");
 const { MongoClient } = require("mongodb");
 
-const dbUrl =
-  "mongodb+srv://malena:123@advfsmalena.q9gdl6b.mongodb.net/?retryWrites=true&w=majority";
+const dbUrl = process.env.DB_URL || "mongodb+srv://malena:123@advfsmalena.q9gdl6b.mongodb.net/?retryWrites=true&w=majority";
 
 let db;
 
@@ -57,13 +57,13 @@ async function getNextSequence(name) {
 function employeeValidate(employee) {
   const errors = [];
   if (employee.firstName.length < 2) {
-    errors.push('Field "title" must be at least 2 characters long.');
+    errors.push("Field title must be at least 2 characters long.");
   }
   if (employee.lastName.length < 2) {
-    errors.push('Field "title" must be at least 2 characters long.');
+    errors.push("Field title must be at least 2 characters long.");
   }
   if (employee.age < 20 || employee.age > 70) {
-    errors.push('Field "age" must be between 20 and 70');
+    errors.push("Field age must be between 20 and 70");
   }
   if (errors.length > 0) {
     throw new UserInputError("Invalid input(s)", { errors });
@@ -97,7 +97,7 @@ async function connectToDb() {
     useUnifiedTopology: true,
   });
   await client.connect();
-  console.log("Connected to MongoDB at", dbUrl);
+  console.log("Connected to MongoDB URL: ", dbUrl);
   db = client.db();
   initDb();
 }
@@ -113,19 +113,19 @@ const server = new ApolloServer({
 
 const app = express();
 
-app.use(express.static("public"));
-
 async function startServer() {
   await server.start();
   server.applyMiddleware({ app });
 }
 startServer();
 
+const port = process.env.API_SERVER_PORT || 3000;
+
 (async function () {
   try {
     await connectToDb();
-    app.listen(3000, function () {
-      console.log("API server started on port 3000");
+    app.listen(port, function () {
+      console.log(`API server started on port ${port}`);
     });
   } catch (err) {
     console.log("ERROR:", err);
