@@ -1,10 +1,10 @@
 {
-  "name": "malena_aguiar_assignment1",
+  "name": "malena_aguiar_assignment2",
   "version": "1.0.0",
-  "description": "Advanced Full Stack - Assignment 1",
+  "description": "Advanced Full Stack - Assignment 2",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -w server.js server.js",
+    "start": "nodemon -w clientserver.js -w .env clientserver.js",
     "compile": "babel src --out-dir public",
     "watch": "babel src --out-dir public --watch --verbose",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,6 +12,7 @@
   "author": "Malena Caroline de Moraes Assuncao Aguiar - 8793442",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "nodemon": "^2.0.20"
   },

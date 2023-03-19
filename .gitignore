@@ -1,3 +1,4 @@
 node_modules
 package-lock.json
 Client/public/App.js
+.env
