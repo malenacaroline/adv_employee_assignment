@@ -3,7 +3,6 @@ require("dotenv").config();
 const express = require("express");
 const { ApolloServer, UserInputError } = require("apollo-server-express");
 const { GraphQLScalarType } = require("graphql");
-const { Kind } = require("graphql/language");
 const { MongoClient } = require("mongodb");
 
 const dbUrl = process.env.DB_URL || "mongodb+srv://malena:123@advfsmalena.q9gdl6b.mongodb.net/?retryWrites=true&w=majority";
@@ -15,32 +14,7 @@ const GraphQLDate = new GraphQLScalarType({
   serialize(value) {
     return value.toISOString();
   },
-  parseValue(value) {
-    const dateValue = new Date(value);
-    return isNaN(dateValue) ? undefined : dateValue;
-  },
-  parseLiteral(ast) {
-    if (ast.kind == Kind.STRING) {
-      const value = new Date(ast.value);
-      return isNaN(value) ? undefined : value;
-    }
-  },
 });
-
-const resolvers = {
-  Query: {
-    employeeList,
-  },
-  Mutation: {
-    addEmployee,
-  },
-  GraphQLDate,
-};
-
-async function employeeList(_, { employee }) {
-  const employees = await db.collection("employees").find(employee).toArray();
-  return employees;
-}
 
 // Generate id dinamically
 async function getNextSequence(name) {
@@ -49,7 +23,7 @@ async function getNextSequence(name) {
     .findOneAndUpdate(
       { _id: name },
       { $inc: { current: 1 } },
-      { returnOriginal: false }
+      { returnOriginal: false },
     );
   return result.value.current;
 }
@@ -70,6 +44,11 @@ function employeeValidate(employee) {
   }
 }
 
+async function employeeList(_, { employee }) {
+  const employees = await db.collection("employees").find(employee).toArray();
+  return employees;
+}
+
 async function addEmployee(_, { employee }) {
   employeeValidate(employee);
   employee.id = await getNextSequence("employees");
@@ -81,7 +60,17 @@ async function addEmployee(_, { employee }) {
   return savedEmployee;
 }
 
-//Initial commands to count employee documents and have the number of the next id
+const resolvers = {
+  Query: {
+    employeeList,
+  },
+  Mutation: {
+    addEmployee,
+  },
+  GraphQLDate,
+};
+
+// Initial commands to count employee documents and have the number of the next id
 async function initDb() {
   const count = await db
     .collection("employees")
@@ -121,13 +110,14 @@ startServer();
 
 const port = process.env.API_SERVER_PORT || 3000;
 
-(async function () {
+async function listenServer() {
   try {
     await connectToDb();
-    app.listen(port, function () {
+    app.listen(port, () => {
       console.log(`API server started on port ${port}`);
     });
   } catch (err) {
     console.log("ERROR:", err);
   }
-})();
+}
+listenServer();
