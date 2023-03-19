@@ -103,7 +103,7 @@ async function connectToDb() {
 }
 
 const server = new ApolloServer({
-  typeDefs: fileSync.readFileSync("./server/schema.graphql", "utf-8"),
+  typeDefs: fileSync.readFileSync("schema.graphql", "utf-8"),
   resolvers,
   formatError: (error) => {
     console.log(error);
@@ -124,8 +124,8 @@ startServer();
 (async function () {
   try {
     await connectToDb();
-    app.listen(5000, function () {
-      console.log("App started on port 5000");
+    app.listen(3000, function () {
+      console.log("API server started on port 3000");
     });
   } catch (err) {
     console.log("ERROR:", err);
