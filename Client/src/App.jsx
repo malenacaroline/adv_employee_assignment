@@ -1,16 +1,19 @@
+/* globals React ReactDOM */
+
 const dateCheckRegex = new RegExp("^\\d\\d\\d\\d-\\d\\d-\\d\\d");
 const jsonDateChecker = (key, value) => {
   if (dateCheckRegex.test(value)) return new Date(value);
   return value;
 };
 
-const isNull = (value) => !value;
+const isNull = value => !value;
 
-//Component to create form to search employee(s)
+// Component to create form to search employee(s)
 class EmployeeSearch extends React.Component {
   constructor(props) {
     super(props);
   }
+
   render() {
     return (
       <EmployeeForm
@@ -21,7 +24,7 @@ class EmployeeSearch extends React.Component {
   }
 }
 
-//Component to create rows of populating with employee data
+// Component to create rows of populating with employee data
 class EmployeeRow extends React.Component {
   constructor(props) {
     super(props);
@@ -33,34 +36,28 @@ class EmployeeRow extends React.Component {
       <tr>
         <td scope="row">{this.props.employee.firstName}</td>
         <td scope="row">{this.props.employee.lastName}</td>
-        <td scope="row">
-          {this.props.employee.age}
-        </td>
+        <td scope="row">{this.props.employee.age}</td>
         <td scope="row">
           {this.props.employee.dateOfJoining.toISOString().split("T")[0]}
         </td>
         <td scope="row">{this.props.employee.title}</td>
         <td scope="row">{this.props.employee.department}</td>
         <td scope="row">{this.props.employee.type}</td>
-        <td scope="row">
-          {this.props.employee.status ? 1 : 0}
-        </td>
+        <td scope="row">{this.props.employee.status ? 1 : 0}</td>
       </tr>
     );
   }
 }
 
-//Component to create table to show employee data
+// Component to create table to show employee data
 class EmployeeTable extends React.Component {
   constructor(props) {
     super(props);
   }
 
-  getTableRows = () => {
-    return this.props.employees.map((employee) => (
-      <EmployeeRow key={employee.id} employee={employee} />
-    ));
-  };
+  getTableRows = () => this.props.employees.map(employee => (
+    <EmployeeRow key={employee.id} employee={employee} />
+  ));
 
   render() {
     return (
@@ -82,12 +79,10 @@ class EmployeeTable extends React.Component {
 }
 
 // Add is-invalid class when field is invalid
-const addIsInvalid = (id) =>
-  document.getElementById(id).classList.add("is-invalid");
+const addIsInvalid = id => document.getElementById(id).classList.add("is-invalid");
 
 // Remove is-invalid class when field is no more invalid
-const removeIsInvalid = (id) =>
-  document.getElementById(id).classList.remove("is-invalid");
+const removeIsInvalid = id => document.getElementById(id).classList.remove("is-invalid");
 
 class EmployeeForm extends React.Component {
   constructor(props) {
@@ -113,12 +108,12 @@ class EmployeeForm extends React.Component {
 
     if (firstName.length < 2) {
       hasErrors = true;
-      addIsInvalid(`${props.actionType}-firstName`);
+      addIsInvalid(`${this.props.actionType}-firstName`);
     }
 
     if (lastName.length < 2) {
       hasErrors = true;
-      addIsInvalid(`${props.actionType}-lastName`);
+      addIsInvalid(`${this.props.actionType}-lastName`);
     }
 
     return !hasErrors;
@@ -130,20 +125,15 @@ class EmployeeForm extends React.Component {
     if (this.state.isAdd && !this.isValid()) return;
 
     const employee = {};
-    if (!isNull(form.firstName.value))
-      employee.firstName = form.firstName.value;
-    if (!isNull(form.lastName.value))
-      employee.lastName = form.lastName.value;
-    if (!isNull(form.age.value))
-      employee.age = Number(form.age.value);
-    if (!isNull(form.dateOfJoining.value))
+    if (!isNull(form.firstName.value)) employee.firstName = form.firstName.value;
+    if (!isNull(form.lastName.value)) employee.lastName = form.lastName.value;
+    if (!isNull(form.age.value)) employee.age = Number(form.age.value);
+    if (!isNull(form.dateOfJoining.value)) {
       employee.dateOfJoining = new Date(form.dateOfJoining.value);
-    if (!isNull(form.title.value))
-      employee.title = form.title.value;
-    if (!isNull(form.department.value))
-      employee.department = form.department.value;
-    if (!isNull(form.type.value))
-      employee.type = form.type.value;
+    }
+    if (!isNull(form.title.value)) employee.title = form.title.value;
+    if (!isNull(form.department.value)) employee.department = form.department.value;
+    if (!isNull(form.type.value)) employee.type = form.type.value;
     if (this.state.isAdd) employee.status = true;
 
     this.props.queryEmployee(employee);
@@ -175,9 +165,7 @@ class EmployeeForm extends React.Component {
         onSubmit={this.handleSubmit}
       >
         <div>
-          <label htmlFor="firstName">
-            First Name
-          </label>
+          <label htmlFor="firstName">First Name</label>
           <input
             type="text"
             name="firstName"
@@ -185,14 +173,10 @@ class EmployeeForm extends React.Component {
             placeholder="John"
             required={this.state.isAdd}
           />
-          <div>
-            Must be be at least 2 characters.
-          </div>
+          <div>Must be be at least 2 characters.</div>
         </div>
         <div>
-          <label htmlFor="lastName">
-            Last Name
-          </label>
+          <label htmlFor="lastName">Last Name</label>
           <input
             type="text"
             name="lastName"
@@ -200,14 +184,10 @@ class EmployeeForm extends React.Component {
             placeholder="Smith"
             required={this.state.isAdd}
           />
-          <div>
-            Must be be at least 2 characters.
-          </div>
+          <div>Must be be at least 2 characters.</div>
         </div>
         <div>
-          <label htmlFor="age">
-            Age
-          </label>
+          <label htmlFor="age">Age</label>
           <input
             type="number"
             name="age"
@@ -217,16 +197,12 @@ class EmployeeForm extends React.Component {
             max={70}
             required={this.state.isAdd}
           />
-          <small
-            id={`${this.props.actionType}-ageHelp`}
-          >
+          <small id={`${this.props.actionType}-ageHelp`}>
             Age must be between 20 and 70.
           </small>
         </div>
         <div>
-          <label htmlFor="dateOfJoining">
-            Date of Joining
-          </label>
+          <label htmlFor="dateOfJoining">Date of Joining</label>
           <input
             type="date"
             name="dateOfJoining"
@@ -237,9 +213,7 @@ class EmployeeForm extends React.Component {
           <div>Invalid date.</div>
         </div>
         <div>
-          <label htmlFor="title">
-            Job Title
-          </label>
+          <label htmlFor="title">Job Title</label>
           <select
             name="title"
             id={`${this.props.actionType}-title`}
@@ -254,9 +228,7 @@ class EmployeeForm extends React.Component {
           </select>
         </div>
         <div>
-          <label htmlFor="department">
-            Department
-          </label>
+          <label htmlFor="department">Department</label>
           <select
             name="department"
             id={`${this.props.actionType}-department`}
@@ -272,9 +244,7 @@ class EmployeeForm extends React.Component {
         </div>
 
         <div>
-          <label htmlFor="type">
-            Employee Type
-          </label>
+          <label htmlFor="type">Employee Type</label>
           <select
             name="type"
             id={`${this.props.actionType}-type`}
@@ -305,6 +275,7 @@ class EmployeeCreate extends React.Component {
   constructor(props) {
     super(props);
   }
+
   render() {
     return (
       <EmployeeForm
@@ -315,7 +286,7 @@ class EmployeeCreate extends React.Component {
   }
 }
 
-//Request to api
+// Request to api
 async function graphQLFetch(query, variables) {
   try {
     const response = await fetch(window.ENV.CLIENT_API_ENDPOINT, {
@@ -328,7 +299,7 @@ async function graphQLFetch(query, variables) {
 
     if (result.errors) {
       const error = result.errors[0];
-      if (error.extensions.code == "BAD_USER_INPUT") {
+      if (error.extensions.code === "BAD_USER_INPUT") {
         const details = error.extensions.exception.errors.join("\n ");
         alert(`${error.message}:\n ${details}`);
       } else {
@@ -337,14 +308,13 @@ async function graphQLFetch(query, variables) {
     }
     return result.data;
   } catch (e) {
-    alert(`Error in sending data to server: ${e.message}`);
+    return alert(`Error in sending data to server: ${e.message}`);
   }
 }
 
-//Component to show final result screen with components and employeee data
+// Component to show final result screen with components and employeee data
 class EmployeeDirectory extends React.Component {
-
-   constructor() {
+  constructor() {
     super();
     this.state = { employees: [] };
     this.loadData = this.loadData.bind(this);
@@ -371,7 +341,7 @@ class EmployeeDirectory extends React.Component {
     }`;
 
     const data = await graphQLFetch(query, { employee });
-    if (data) this.setState({employees: data.employeeList});
+    if (data) this.setState({ employees: data.employeeList });
   }
 
   async addEmployee(employee) {
@@ -384,6 +354,7 @@ class EmployeeDirectory extends React.Component {
     const data = await graphQLFetch(query, { employee });
     if (data) this.loadData();
   }
+
   render() {
     return (
       <React.Fragment>

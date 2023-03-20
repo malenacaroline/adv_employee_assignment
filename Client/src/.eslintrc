@@ -1,0 +1,19 @@
+{
+  "extends": "airbnb-base",
+  "env": {
+    "browser": true
+  },
+  "parser": "babel-eslint",
+  "rules": {
+    "no-param-reassign": "off",
+    "quotes": ["off", "double"],
+    "linebreak-style": 0,
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-no-undef": "off",
+    "react/no-multi-comp": "off",
+    "no-alert": "off",
+    "no-unused-vars": "off",
+    "no-useless-constructor": "off",
+  }
+}

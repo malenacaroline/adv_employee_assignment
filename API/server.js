@@ -102,7 +102,7 @@ const server = new ApolloServer({
 
 const app = express();
 
-const enableCors = (process.env.ENABLE_CORS || "true") == "true";
+const enableCors = (process.env.ENABLE_CORS || "true") === "true";
 
 async function serverMiddleware() {
   await server.start();
@@ -112,7 +112,7 @@ serverMiddleware();
 
 const port = process.env.API_SERVER_PORT || 3000;
 
-(async function start() {
+async function start() {
   try {
     app.listen(port, () => {
       console.log(`API server started on port ${port}`);
@@ -121,4 +121,5 @@ const port = process.env.API_SERVER_PORT || 3000;
   } catch (err) {
     console.log("ERROR:", err);
   }
-})();
+}
+start();
