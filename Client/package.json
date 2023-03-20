@@ -6,17 +6,20 @@
   "scripts": {
     "start": "nodemon -w clientserver.js -w .env clientserver.js",
     "lint": "eslint . --ext js,jsx --ignore-pattern public",
-    "compile": "babel src --out-dir public",
-    "watch": "babel src --out-dir public --watch --verbose",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "compile": "webpack --mode production",
+    "watch": "webpack --watch"
   },
   "author": "Malena Caroline de Moraes Assuncao Aguiar - 8793442",
   "license": "ISC",
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "http-proxy-middleware": "^0.21.0",
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.20.7",
@@ -24,6 +27,7 @@
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.9.0",
     "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.3.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-plugin-import": "^2.27.5",
