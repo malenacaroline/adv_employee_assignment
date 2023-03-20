@@ -1,3 +1,7 @@
+* {
+  font-family: arial, sans-serif;
+}
+
 h1 {
   width: max-content;
   margin-right: auto;
@@ -6,7 +10,6 @@ h1 {
 
 table {
   border: 1px solid #dddddd;
-  font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 100%;
 }
@@ -26,39 +29,36 @@ tr:nth-child(even) {
   background-color: #efefef;
 }
 
-.search {
-  background-color: rgb(51, 51, 230);
-  color: #fff;
-  padding: 24px 12px;
-  border-radius: 4px;
-  width: max-content;
-  margin: auto;
-}
-
-.search input, .search select {
+form input, form select {
   margin-right: 24px;
-  height: 32px;
+  padding: 8px;
   border-radius: 4px;
   padding: 4px;
   outline: 0;
   border: none;
   font-size: 16px;
+  box-sizing: border-box;
 }
 
-.search button {
-  color:rgb(51, 51, 230);
-  border-radius: 4px;
-  font-weight: 600;
-  border: none;
-  height: 40px;
-  font-size: 16px;
-  padding: 12px;
+.container {
+  display: flex;
+  padding: 24px;
+}
+
+#search {
+  width: 400px;
+  margin-right: 24px;
+}
+
+#add {
+  width: 500px;
+  margin: 0 auto;
 }
 
 form label {
   display: block;
   font-size: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
 }
 
 form input, form select {
@@ -78,4 +78,9 @@ form input, form select {
   appearance: none;
   border-radius: .375rem;
   transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+input[type="submit"] {
+  background-color: #2c3e50;
+  color: #fff;
 }

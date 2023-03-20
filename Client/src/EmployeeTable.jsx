@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 class EmployeeRow extends React.Component {
   constructor(props) {
     super(props);
@@ -17,6 +18,13 @@ class EmployeeRow extends React.Component {
         <td scope="row">{this.props.employee.department}</td>
         <td scope="row">{this.props.employee.type}</td>
         <td scope="row">{this.props.employee.status ? 1 : 0}</td>
+        <td scope="row">
+          <Link to="/employeeDetails">Details</Link>
+          {' | '}
+          <Link to="/employeeUpdate">Update</Link>
+          {' | '}
+          <Link to="/deleteEmployee">Delete</Link>
+        </td>
       </tr>
     );
   }
@@ -45,6 +53,7 @@ export default class EmployeeTable extends React.Component {
             <th scope="col">Department</th>
             <th scope="col">Employee Type</th>
             <th scope="col">Current Status</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>{this.getTableRows()}</tbody>
