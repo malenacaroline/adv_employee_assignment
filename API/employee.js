@@ -23,6 +23,13 @@ async function employeeList(_, { employee }) {
   return employees;
 }
 
+async function employeeDetails(_, { id }) {
+  console.log("employeeDetails", id);
+  const db = getDb();
+  const employeesDetails = await db.collection("employees").findOne({ id });
+  return employeesDetails;
+}
+
 async function addEmployee(_, { employee }) {
   const db = getDb();
   employeeValidate(employee);
@@ -35,4 +42,4 @@ async function addEmployee(_, { employee }) {
   return savedEmployee;
 }
 
-module.exports = { employeeList, addEmployee };
+module.exports = { employeeList, employeeDetails, addEmployee };

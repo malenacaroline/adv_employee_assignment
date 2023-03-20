@@ -46,6 +46,7 @@ input EmployeeInputs {
 }
 
 input SearchEmployeeInputs {
+  id: Int
   firstName: String
   lastName: String
   age: Int
@@ -59,6 +60,7 @@ input SearchEmployeeInputs {
 
 type Query {
   employeeList(employee: SearchEmployeeInputs): [Employee!]!
+  employeeDetails(id: Int): Employee!
 }
 
 type Mutation {

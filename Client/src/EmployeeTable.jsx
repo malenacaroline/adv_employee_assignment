@@ -19,7 +19,7 @@ class EmployeeRow extends React.Component {
         <td scope="row">{this.props.employee.type}</td>
         <td scope="row">{this.props.employee.status ? 1 : 0}</td>
         <td scope="row">
-          <Link to="/employeeDetails">Details</Link>
+          <Link to={`/employees/${this.props.employee.id}`}>Details</Link>
           {' | '}
           <Link to="/employeeUpdate">Update</Link>
           {' | '}

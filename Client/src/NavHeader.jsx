@@ -17,7 +17,7 @@ export default function NavHeader() {
         <Route index element={<Home />} />
         <Route path="employees" element={<EmployeeList />} />
         <Route path="employeeAdd" element={<EmployeeAdd />} />
-        <Route path="employeeDetails" element={<EmployeeDetails />} />
+        <Route path="employees/:id" element={<EmployeeDetails />} />
         <Route path="employeeUpdate" element={<EmployeeUpdate />} />
         <Route path="*" element={<NotFound />} />
       </Route>

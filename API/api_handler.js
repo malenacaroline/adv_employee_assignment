@@ -8,6 +8,7 @@ const employee = require('./employee');
 const resolvers = {
   Query: {
     employeeList: employee.employeeList,
+    employeeDetails: employee.employeeDetails
   },
   Mutation: {
     addEmployee: employee.addEmployee,
