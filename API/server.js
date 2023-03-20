@@ -102,22 +102,23 @@ const server = new ApolloServer({
 
 const app = express();
 
-async function startServer() {
+const enableCors = (process.env.ENABLE_CORS || "true") == "true";
+
+async function serverMiddleware() {
   await server.start();
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, path: "/graphql", cors: enableCors });
 }
-startServer();
+serverMiddleware();
 
 const port = process.env.API_SERVER_PORT || 3000;
 
-async function listenServer() {
+(async function start() {
   try {
-    await connectToDb();
     app.listen(port, () => {
       console.log(`API server started on port ${port}`);
     });
+    await connectToDb();
   } catch (err) {
     console.log("ERROR:", err);
   }
-}
-listenServer();
+})();
