@@ -14,12 +14,15 @@ export default class EmployeeForm extends React.Component {
     this.state = {
       isAdd: this.props.actionType === "add",
       isSearch: this.props.actionType === "search",
+      isDetails: this.props.actionType === "details",
+      isUpdate: this.props.actionType === "update",
     };
 
     this.isValid = this.isValid.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.resetForm = this.resetForm.bind(this);
     this.resetError = this.resetError.bind(this);
+    this.formatDate = this.formatDate.bind(this);
   }
 
   isValid() {
@@ -81,11 +84,32 @@ export default class EmployeeForm extends React.Component {
     removeIsInvalid(`${this.props.actionType}-lastName`);
   }
 
+  formatDate(date) {
+    return date.getFullYear() + "-" + (date.getMonth()+1).toString().padStart(2, "0") + "-" + date.getDate();
+  }
+
   render() {
+    const actionType = this.props.actionType;
+    const employeeDetails = this.props.employeeDetails;
+
+    const isAdd = this.state.isAdd;
+    const isSearch = this.state.isSearch;
+    const isDetails = this.state.isDetails;
+    const isUpdate = this.state.isUpdate;
+
+    let actionLabel = "";
+    if(isAdd) {
+      actionLabel = "Add";
+    } else if (isSearch){
+      actionLabel = "Search";
+    } else {
+      actionLabel = "Update";
+    }
+
     return (
       <form
-        name={this.props.actionType}
-        id={this.props.actionType}
+        name={actionType}
+        id={actionType}
         onSubmit={this.handleSubmit}
       >
         <div>
@@ -93,58 +117,69 @@ export default class EmployeeForm extends React.Component {
           <input
             type="text"
             name="firstName"
-            id={`${this.props.actionType}-firstName`}
+            id={`${actionType}-firstName`}
             placeholder="John"
-            required={this.state.isAdd}
+            required={isAdd}
+            defaultValue={(isUpdate || isDetails) ? employeeDetails?.firstName: ''}
+            readOnly={isUpdate || isDetails}
           />
-          <div>Must be be at least 2 characters.</div>
+          {isAdd && (<div>Must be be at least 2 characters.</div>)}
         </div>
+
         <div>
           <label htmlFor="lastName">Last Name</label>
           <input
             type="text"
             name="lastName"
-            id={`${this.props.actionType}-lastName`}
+            id={`${actionType}-lastName`}
             placeholder="Smith"
-            required={this.state.isAdd}
+            required={isAdd}
+            defaultValue={(isUpdate || isDetails) ? employeeDetails?.lastName: ''}
+            readOnly={isUpdate || isDetails}
           />
-          <div>Must be be at least 2 characters.</div>
+          {isAdd && (<div>Must be be at least 2 characters.</div>)}
         </div>
+
         <div>
           <label htmlFor="age">Age</label>
           <input
             type="number"
             name="age"
-            id={`${this.props.actionType}-age`}
+            id={`${actionType}-age`}
             placeholder="35"
             min={20}
             max={70}
-            required={this.state.isAdd}
+            required={isAdd}
+            defaultValue={(isUpdate || isDetails) ? employeeDetails?.age: ''}
+            readOnly={isUpdate || isDetails}
           />
-          <small id={`${this.props.actionType}-ageHelp`}>
-            Age must be between 20 and 70.
-          </small>
+          {isAdd && (<div>Age must be between 20 and 70.</div>)}
         </div>
+
         <div>
           <label htmlFor="dateOfJoining">Date of Joining</label>
           <input
             type="date"
             name="dateOfJoining"
-            id={`${this.props.actionType}-dateOfJoining`}
+            id={`${actionType}-dateOfJoining`}
             placeholder="mm/dd/yyyy"
-            required={this.state.isAdd}
+            required={isAdd}
+            defaultValue={(isUpdate || isDetails) ? employeeDetails?.dateOfJoining && this.formatDate(employeeDetails?.dateOfJoining) : ''}
+            readOnly={isUpdate || isDetails}
           />
-          <div>Invalid date.</div>
+          {isAdd && (<div>Invalid date.</div>)}
         </div>
+
         <div>
           <label htmlFor="title">Job Title</label>
           <select
             name="title"
-            id={`${this.props.actionType}-title`}
+            id={`${actionType}-title`}
             aria-label="label for title select"
-            required={this.state.isAdd}
+            required={isAdd}
+            defaultValue={(isUpdate || isDetails) ? employeeDetails?.title: ''}
+            disabled={isDetails}
           >
-            {this.state.isSearch && <option value="" defaultValue></option>}
             <option value="Employee">Employee</option>
             <option value="Manager">Manager</option>
             <option value="Director">Director</option>
@@ -155,11 +190,12 @@ export default class EmployeeForm extends React.Component {
           <label htmlFor="department">Department</label>
           <select
             name="department"
-            id={`${this.props.actionType}-department`}
+            id={`${actionType}-department`}
             aria-label="label for department select"
-            required={this.state.isAdd}
+            required={isAdd}
+            defaultValue={(isUpdate || isDetails) ? employeeDetails?.department: ''}
+            disabled={isDetails}
           >
-            {this.state.isSearch && <option value="" defaultValue></option>}
             <option value="IT">IT</option>
             <option value="Marketing">Marketing</option>
             <option value="HR">HR</option>
@@ -171,11 +207,13 @@ export default class EmployeeForm extends React.Component {
           <label htmlFor="type">Employee Type</label>
           <select
             name="type"
-            id={`${this.props.actionType}-type`}
+            id={`${actionType}-type`}
             aria-label="label for type select"
-            required={this.state.isAdd}
+            required={isAdd}
+            defaultValue={(isUpdate || isDetails) ? employeeDetails?.type: ''}
+            disabled={isUpdate || isDetails}
           >
-            {this.state.isSearch && <option value="" defaultValue></option>}
+            {isSearch && <option value="" defaultValue></option>}
             <option value="FullTime">FullTime</option>
             <option value="PartTime">PartTime</option>
             <option value="Contract">Contract</option>
@@ -183,12 +221,26 @@ export default class EmployeeForm extends React.Component {
           </select>
         </div>
 
-        <div>
+        {(isUpdate || isDetails) && <div>
+          <label htmlFor="status">Current Status</label>
+          <select
+            name="status"
+            id={`${actionType}-status`}
+            aria-label="label for status select"
+            defaultValue={(isUpdate || isDetails) ? employeeDetails?.status: ''}
+            disabled={isDetails}
+          >
+            <option value="0">Active</option>
+            <option value="1">Not active</option>
+          </select>
+        </div>}
+
+        {(isAdd || isSearch || isUpdate) && (<div>
           <input
             type="submit"
-            value={this.state.isAdd ? "Add Employee" : "Search Employee"}
+            value={`${actionLabel} Employee`}
           />
-        </div>
+        </div>)}
       </form>
     );
   }

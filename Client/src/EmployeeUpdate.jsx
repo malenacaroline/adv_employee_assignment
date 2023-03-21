@@ -17,14 +17,15 @@ export default class EmployeeUpdate extends React.Component {
 
     await graphQLFetch(query, { employee });
   }
-
   render() {
+    console.log(this.props);
     return (
       <div>
         <h1>ESM - Update Employee</h1>
         <EmployeeForm
           actionType="update"
           queryEmployee={this.updateEmployee}
+          employeeDetails={this.props.employeeDetails}
         ></EmployeeForm>
       </div>
     );

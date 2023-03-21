@@ -9,7 +9,7 @@ export default function Layout() {
         {' | '}
         <Link to="/employees">Employee List</Link>
         {' | '}
-        <Link to="/employeeAdd">Add Employee</Link>
+        <Link to="/employees/add">Add Employee</Link>
       </nav>
       <Outlet />
     </>

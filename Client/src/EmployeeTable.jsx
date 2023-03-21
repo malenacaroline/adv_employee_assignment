@@ -8,6 +8,7 @@ class EmployeeRow extends React.Component {
   render() {
     return (
       <tr>
+        <td scope="row">{this.props.employee.id}</td>
         <td scope="row">{this.props.employee.firstName}</td>
         <td scope="row">{this.props.employee.lastName}</td>
         <td scope="row">{this.props.employee.age}</td>
@@ -21,9 +22,9 @@ class EmployeeRow extends React.Component {
         <td scope="row">
           <Link to={`/employees/${this.props.employee.id}`}>Details</Link>
           {' | '}
-          <Link to="/employeeUpdate">Update</Link>
+          <Link to={`/employees/update/${this.props.employee.id}`}>Update</Link>
           {' | '}
-          <Link to="/deleteEmployee">Delete</Link>
+          <Link to="/employees/delete">Delete</Link>
         </td>
       </tr>
     );
@@ -45,6 +46,7 @@ export default class EmployeeTable extends React.Component {
       <table>
         <thead>
           <tr>
+            <th scope="col">Id</th>
             <th scope="col">First Name</th>
             <th scope="col">Last Name</th>
             <th scope="col">Age</th>

@@ -45,14 +45,13 @@ form input, form select {
   padding: 24px;
 }
 
-#search {
-  width: 400px;
-  margin-right: 24px;
-}
-
-#add {
+form {
   width: 500px;
   margin: 0 auto;
+}
+
+#search {
+  margin-right: 24px !important;
 }
 
 form label {

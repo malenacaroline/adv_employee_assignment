@@ -7,6 +7,7 @@ import EmployeeAdd from './EmployeeAdd.jsx';
 import EmployeeDetails from './EmployeeDetails.jsx';
 import EmployeeUpdate from './EmployeeUpdate.jsx';
 import Layout from './Layout.jsx';
+import EmployeeDetailsWrapper from './EmployeeDetailsWrapper.jsx';
 
 const NotFound = () => <h1>Page Not Found</h1>;
 
@@ -16,9 +17,9 @@ export default function NavHeader() {
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="employees" element={<EmployeeList />} />
-        <Route path="employeeAdd" element={<EmployeeAdd />} />
-        <Route path="employees/:id" element={<EmployeeDetails />} />
-        <Route path="employeeUpdate" element={<EmployeeUpdate />} />
+        <Route path="employees/add" element={<EmployeeAdd />} />
+        <Route path="employees/:id" element={<EmployeeDetailsWrapper wrappedComponent={EmployeeDetails} />} />
+        <Route path="employees/update/:id" element={<EmployeeDetailsWrapper wrappedComponent={EmployeeUpdate} />}/>
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
