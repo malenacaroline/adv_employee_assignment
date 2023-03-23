@@ -23,7 +23,7 @@ enum EmployeeType {
 
 type Employee {
   _id: ID!
-  id: Int!
+  id: Int
   firstName: String!
   lastName: String!
   age: Int!
@@ -54,6 +54,7 @@ input SearchEmployeeInputs {
   title: TitleType
   department: DepartamentType
   type: EmployeeType
+  status: Boolean
 }
 
 ##### Top level declarations
@@ -65,4 +66,6 @@ type Query {
 
 type Mutation {
   addEmployee(employee: EmployeeInputs!): Employee!
+  updateEmployee(employee: SearchEmployeeInputs!): Employee
+  deleteEmployee(id: Int): Employee
 }

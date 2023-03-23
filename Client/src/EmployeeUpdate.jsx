@@ -8,17 +8,19 @@ export default class EmployeeUpdate extends React.Component {
     this.updateEmployee = this.updateEmployee.bind(this);
   }
 
-  async updateEmployee(employee) {
-    const query = `mutation updateEmployee($employee: EmployeeInputs!) {
+  async updateEmployee() {
+    console.log("updateEmployee component func");
+    const employee = this.props.employeeDetails;
+    console.log(employee);
+    const query = `mutation updateEmployee($employee: SearchEmployeeInputs!) {
        updateEmployee(employee: $employee) {
         id
       }
     }`;
 
-    await graphQLFetch(query, { employee });
+    await graphQLFetch(query, {employee});
   }
   render() {
-    console.log(this.props);
     return (
       <div>
         <h1>ESM - Update Employee</h1>

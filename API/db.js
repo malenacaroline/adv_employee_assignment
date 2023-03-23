@@ -1,17 +1,8 @@
 require("dotenv").config();
 const { MongoClient } = require('mongodb');
+const { initDb } = require('./scripts/init_db.js');
 
 let db;
-
-// Initial commands to count employee documents and have the number of the next id
-async function initDb() {
-  const count = await db
-    .collection("employees")
-    .estimatedDocumentCount("employees");
-
-  db.collection("counters").deleteOne({ _id: "employees" });
-  db.collection("counters").insertOne({ _id: "employees", current: count });
-}
 
 // Generate id dinamically
 async function getNextSequence(name) {
@@ -34,7 +25,7 @@ async function connectToDb() {
   await client.connect();
   console.log("Connected to MongoDB URL: ", dbUrl);
   db = client.db();
-  initDb();
+  initDb(db);
 }
 
 function getDb() {

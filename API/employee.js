@@ -24,7 +24,6 @@ async function employeeList(_, { employee }) {
 }
 
 async function employeeDetails(_, { id }) {
-  console.log("employeeDetails", id);
   const db = getDb();
   const employeesDetails = await db.collection("employees").findOne({ id });
   return employeesDetails;
@@ -36,10 +35,24 @@ async function addEmployee(_, { employee }) {
   employee.id = await getNextSequence("employees");
 
   const result = await db.collection("employees").insertOne(employee);
-  const savedEmployee = await db
+  const createdEmployee = await db
     .collection("employees")
     .findOne({ _id: result.insertedId });
-  return savedEmployee;
+  return createdEmployee;
 }
 
-module.exports = { employeeList, employeeDetails, addEmployee };
+async function updateEmployee(_, { employee }) {
+  console.log("employeeUpdateeee", employee);
+  const db = getDb();
+  const updatedEmployee = await db.collection("employees").updateOne({ id: employee.id }, {$set:{title: employee.title, department: employee.department, status: employee.status}});
+  return updatedEmployee;
+}
+
+async function deleteEmployee(_, { id }) {
+  console.log("employeeDelete", id);
+  const db = getDb();
+  const deletedEmployee = await db.collection("employees").deleteOne({ id });
+  return deletedEmployee;
+}
+
+module.exports = { employeeList, employeeDetails, addEmployee, updateEmployee, deleteEmployee };

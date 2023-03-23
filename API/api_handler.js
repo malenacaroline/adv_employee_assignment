@@ -12,6 +12,8 @@ const resolvers = {
   },
   Mutation: {
     addEmployee: employee.addEmployee,
+    updateEmployee: employee.updateEmployee,
+    deleteEmployee: employee.deleteEmployee,
   },
   GraphQLDate,
 };

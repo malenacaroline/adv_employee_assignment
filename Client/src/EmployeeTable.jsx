@@ -24,7 +24,7 @@ class EmployeeRow extends React.Component {
           {' | '}
           <Link to={`/employees/update/${this.props.employee.id}`}>Update</Link>
           {' | '}
-          <Link to="/employees/delete">Delete</Link>
+          <Link to={`/employees/delete/${this.props.employee.id}`}>Delete</Link>
         </td>
       </tr>
     );
