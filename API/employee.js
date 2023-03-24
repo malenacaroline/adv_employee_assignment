@@ -20,7 +20,6 @@ function employeeValidate(employee) {
 async function employeeList(_, { employee }) {
   const db = getDb();
   const employees = await db.collection("employees").find(employee).toArray();
-  console.log("employees: ", employees);
   return employees;
 }
 
@@ -43,16 +42,12 @@ async function addEmployee(_, { employee }) {
 }
 
 async function updateEmployee(_, { employee }) {
-  console.log("employeeUpdateeee", employee);
-  console.log("employeeUpdateeee", employee.id);
   const db = getDb();
   const updatedEmployee = await db.collection("employees").updateOne({ "id": employee.id }, {$set: { "title": employee.title, "department": employee.department, "status": employee.status }});
-  console.log("updatedEmployee: ", updatedEmployee);
   return updatedEmployee;
 }
 
 async function deleteEmployee(_, { id }) {
-  console.log("employeeDelete", id);
   const db = getDb();
   const deletedEmployee = await db.collection("employees").deleteOne({ id });
   return deletedEmployee;

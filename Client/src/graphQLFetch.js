@@ -6,8 +6,6 @@ const jsonDateChecker = (key, value) => {
 
 // Request to api
 export default async function graphQLFetch(query, variables = {}) {
-  console.log("graphQLFetch");
-  console.log(query, variables);
   try {
     const response = await fetch(window.ENV.CLIENT_API_ENDPOINT, {
       method: "POST",

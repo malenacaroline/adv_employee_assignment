@@ -1,7 +1,6 @@
 import React from 'react';
 import EmployeeForm from "./EmployeeForm.jsx";
 import graphQLFetch from './graphQLFetch.js';
-
 export default class EmployeeUpdate extends React.Component {
   constructor(props) {
     super(props);
@@ -9,15 +8,20 @@ export default class EmployeeUpdate extends React.Component {
   }
 
   async updateEmployee(employee) {
-    console.log("updateEmployee component func");
-    console.log(employee);
     const query = `mutation updateEmployee($employee: SearchEmployeeInputs!) {
        updateEmployee(employee: $employee) {
         id
       }
     }`;
 
-    await graphQLFetch(query, {employee});
+    try{
+      await graphQLFetch(query, {employee});
+      alert("User updated successfully");
+      this.props.navigate("/employees");
+    } catch(error) {
+      console.log(error);
+      alert("Error updating employee");
+    }
   }
   render() {
     return (

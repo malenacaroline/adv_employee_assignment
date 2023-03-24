@@ -84,3 +84,14 @@ input[type="submit"] {
   color: #fff;
   cursor: pointer;
 }
+
+input + div {
+  font-size: 14px;
+  color: #858585;
+  margin-top: -18px;
+  margin-bottom: 18px;
+}
+
+input + div.error {
+  color: #c70000;
+}

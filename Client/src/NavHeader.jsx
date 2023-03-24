@@ -21,7 +21,7 @@ export default function NavHeader() {
         <Route path="employees/add" element={<EmployeeAdd />} />
         <Route path="employees/:id" element={<EmployeeDetailsWrapper wrappedComponent={EmployeeDetails} />} />
         <Route path="employees/update/:id" element={<EmployeeDetailsWrapper wrappedComponent={EmployeeUpdate} />}/>
-        <Route path="employees/delete/:id" element={<EmployeeDetailsWrapper wrappedComponent={EmployeeDelete} />}/>
+        <Route path="employees/delete/:id" element={<EmployeeDelete/>}/>
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

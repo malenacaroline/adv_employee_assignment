@@ -7,13 +7,8 @@ let db;
 // Generate id dinamically
 async function getNextSequence(name) {
   const result = await db
-    .collection("counters")
-    .findOneAndUpdate(
-      { _id: name },
-      { $inc: { current: 1 } },
-      { returnOriginal: false },
-    );
-  return result.value.current;
+    .collection(name).findOne({}, {sort: {_id: -1}, limit: 1 });
+  return result.id + 1;
 }
 
 async function connectToDb() {

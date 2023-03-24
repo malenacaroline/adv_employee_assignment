@@ -1,17 +1,6 @@
 import React from 'react';
 import graphQLFetch from './graphQLFetch.js';
-import {  useParams } from 'react-router-dom';
-
-const withRouter = WrappedComponent => props => {
-  const params = useParams();
- 
-  return (
-    <WrappedComponent
-      {...props}
-      params={params}
-    />
-  );
-};
+import { withRouter } from './utils.jsx';
 
 class EmployeeDetailsWrapper extends React.Component {
   constructor() {
@@ -25,7 +14,6 @@ class EmployeeDetailsWrapper extends React.Component {
   }
 
   async loadData() {
-    console.log("Call load data");
     const id = Number(this.props.params.id);
     const query = `query EmployeeDetails($id: Int){
       employeeDetails(id: $id) {
@@ -42,7 +30,6 @@ class EmployeeDetailsWrapper extends React.Component {
     }`;
 
     const data = await graphQLFetch(query, { id });
-    console.log("data", data);
     if (data) this.setState({ employeeDetails: data.employeeDetails });
   }
 
@@ -51,8 +38,9 @@ class EmployeeDetailsWrapper extends React.Component {
   render() {
     const Wrapper = this.props.wrappedComponent;
     return(
-      <Wrapper employeeDetails={this.state.employeeDetails}></Wrapper>
+      <Wrapper employeeDetails={this.state.employeeDetails} navigate={this.props.navigate} ></Wrapper>
     );
   }
 }
+
 export default withRouter(EmployeeDetailsWrapper);
