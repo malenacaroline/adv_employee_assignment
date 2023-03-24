@@ -54,6 +54,7 @@ export default class EmployeeForm extends React.Component {
     if (this.state.isAdd && !this.isValid()) return;
 
     const employee = {};
+    if (!isNull(form.id.value)) employee.id = Number(form.id.value);
     if (!isNull(form.firstName.value)) employee.firstName = form.firstName.value;
     if (!isNull(form.lastName.value)) employee.lastName = form.lastName.value;
     if (!isNull(form.age.value)) employee.age = Number(form.age.value);
@@ -63,7 +64,7 @@ export default class EmployeeForm extends React.Component {
     if (!isNull(form.title.value)) employee.title = form.title.value;
     if (!isNull(form.department.value)) employee.department = form.department.value;
     if (!isNull(form.type.value)) employee.type = form.type.value;
-    if (this.state.isAdd) employee.status = true;
+    if (!isNull(form.status.value)) employee.status = form.status.value === "1";
 
     this.props.queryEmployee(employee);
     if (this.state.isAdd) this.resetForm();
@@ -79,6 +80,7 @@ export default class EmployeeForm extends React.Component {
     form.title.value = this.state.isAdd ? "Employee" : "";
     form.department.value = this.state.isAdd ? "IT" : "";
     form.type.value = this.state.isAdd ? "FullTime" : "";
+    form.status.value = "";
     this.resetError();
   }
 
@@ -119,6 +121,7 @@ export default class EmployeeForm extends React.Component {
         onSubmit={this.handleSubmit}
       >
         <div>
+          <input type="hidden" name="id" defaultValue={(isUpdate || isDetails || isDelete) ? employeeDetails?.id: ''}/>
           <label htmlFor="firstName">First Name</label>
           <input
             type="text"
@@ -227,7 +230,7 @@ export default class EmployeeForm extends React.Component {
           </select>
         </div>
 
-        {(isUpdate || isDetails || isDelete) && <div>
+        <div>
           <label htmlFor="status">Current Status</label>
           <select
             name="status"
@@ -236,10 +239,10 @@ export default class EmployeeForm extends React.Component {
             defaultValue={(isUpdate || isDetails || isDelete) ? employeeDetails?.status: ''}
             disabled={isDetails || isDelete}
           >
-            <option value="0">Active</option>
-            <option value="1">Not active</option>
+            <option value="1">Active</option>
+            <option value="0">Not active</option>
           </select>
-        </div>}
+        </div>
 
         {(isAdd || isSearch || isUpdate || isDelete) && (<div>
           <input

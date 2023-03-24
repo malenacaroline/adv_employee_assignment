@@ -8,9 +8,8 @@ export default class EmployeeUpdate extends React.Component {
     this.updateEmployee = this.updateEmployee.bind(this);
   }
 
-  async updateEmployee() {
+  async updateEmployee(employee) {
     console.log("updateEmployee component func");
-    const employee = this.props.employeeDetails;
     console.log(employee);
     const query = `mutation updateEmployee($employee: SearchEmployeeInputs!) {
        updateEmployee(employee: $employee) {

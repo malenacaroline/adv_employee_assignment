@@ -31,7 +31,7 @@ type Employee {
   title: TitleType!
   department: DepartamentType!
   type: EmployeeType!
-  status: Boolean!
+  status: Boolean
 }
 
 input EmployeeInputs {
