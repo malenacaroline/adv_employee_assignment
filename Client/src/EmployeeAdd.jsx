@@ -28,7 +28,7 @@ class EmployeeAdd extends React.Component {
   render() {
     return (
       <div>
-        <h1>ESM - Add Employee</h1>
+        <h1>EMS - Add Employee</h1>
         <EmployeeForm
           actionType="add"
           queryEmployee={this.addEmployee}

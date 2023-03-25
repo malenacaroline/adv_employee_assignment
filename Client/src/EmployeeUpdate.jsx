@@ -27,7 +27,7 @@ export default class EmployeeUpdate extends React.Component {
   render() {
     return (
       <div>
-        <h1>ESM - Update Employee</h1>
+        <h1>EMS - Update Employee</h1>
         <EmployeeForm
           actionType="update"
           queryEmployee={this.updateEmployee}

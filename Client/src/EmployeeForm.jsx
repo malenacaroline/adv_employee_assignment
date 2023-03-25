@@ -85,7 +85,7 @@ export default class EmployeeForm extends React.Component {
     if (!isNull(form.title.value)) employee.title = form.title.value;
     if (!isNull(form.department.value)) employee.department = form.department.value;
     if (!isNull(form.type.value)) employee.type = form.type.value;
-    if (!isNull(form.status?.value)) employee.status = form.status.value === 1;
+    if (!isNull(form.status?.value)) employee.status = form.status.value === '1';
     if (this.props.searchParams) this.setSearchParams(employee);
     this.props.queryEmployee(employee);
     if (this.state.isAdd) this.resetForm();
@@ -267,11 +267,11 @@ export default class EmployeeForm extends React.Component {
             name="status"
             id={`${actionType}-status`}
             aria-label="label for status select"
-            defaultValue={employeeDetails?.status ? 1 : 0}
+            defaultValue={employeeDetails?.status ? '1' : '0'}
             disabled={isDetails}
           >
-            <option value={1}>Active</option>
-            <option value={0}>Not active</option>
+            <option value="1">Active</option>
+            <option value="0">Not active</option>
           </select>
         </div>)}
 

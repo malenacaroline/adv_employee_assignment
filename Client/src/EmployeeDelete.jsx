@@ -28,11 +28,11 @@ class EmployeeDelete extends React.Component {
   render() {
     return (
       <div>
-        <h1>ESM - Employee Deletion </h1>
-        <div>Do you want to delete this employee?</div>
-        <div>
-          <button onClick={this.deleteEmployee}>Delete Employee</button>
-          <button onClick={() => this.props.navigate("/employees")}>Cancel</button>
+        <h1>EMS - Employee Deletion </h1>
+        <div className="delete-msg">
+          <p>Do you want to delete this employee?</p>
+          <button onClick={this.deleteEmployee} type="button">Delete Employee</button>
+          <button onClick={() => this.props.navigate("/employees")} type="button">Cancel</button>
         </div>
       </div>
     );

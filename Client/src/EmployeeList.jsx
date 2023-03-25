@@ -38,7 +38,7 @@ class EmployeeList extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <h1>Employee Management System</h1>
+        <h1>EMS - Employees List</h1>
         <div className="container">
           <EmployeeSearch
             queryEmployee={this.loadData}
