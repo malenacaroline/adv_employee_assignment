@@ -8,6 +8,22 @@ const addIsInvalid = id => document.getElementById(id).nextElementSibling.classL
 // Remove is-invalid class when field is no more invalid
 const removeIsInvalid = id => document.getElementById(id).nextElementSibling.classList.remove("error");
 
+// Format date to input 
+const formatDate = date => {
+  if(isNull(date)) return '';
+  return new Date(date).toISOString().slice(0,10);
+ }
+ // Convert URLSearchParams into Object
+ const parseSearchParamsToObject = searchParams => {
+  if(isNull(searchParams)) return;
+  const result = {}
+  for(const [key, value] of searchParams.entries()) result[key] = value;
+  if(!isNull(result.age)) result.age = Number(result.age);
+  if(!isNull(result.dateOfJoining)) result.dateOfJoining = new Date(result.dateOfJoining).toISOString();
+  return result;
+}
+
+
 export default class EmployeeForm extends React.Component {
   constructor(props) {
     super(props);
@@ -22,7 +38,14 @@ export default class EmployeeForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.resetForm = this.resetForm.bind(this);
     this.resetError = this.resetError.bind(this);
-    this.formatDate = this.formatDate.bind(this);
+    this.setSearchParams = this.setSearchParams.bind(this);
+  }
+
+  // Perform search query when there are search parameters
+  componentDidMount() {
+    const employeeSearchParams = parseSearchParamsToObject(this.props.searchParams);
+    if(isNull(employeeSearchParams)) return;
+    this.props.queryEmployee(employeeSearchParams);
   }
 
   isValid() {
@@ -57,15 +80,26 @@ export default class EmployeeForm extends React.Component {
     if (!isNull(form.lastName.value)) employee.lastName = form.lastName.value;
     if (!isNull(form.age.value)) employee.age = Number(form.age.value);
     if (!isNull(form.dateOfJoining.value)) {
-      employee.dateOfJoining = new Date(form.dateOfJoining.value);
+      employee.dateOfJoining = new Date(form.dateOfJoining.value).toISOString();
     }
     if (!isNull(form.title.value)) employee.title = form.title.value;
     if (!isNull(form.department.value)) employee.department = form.department.value;
     if (!isNull(form.type.value)) employee.type = form.type.value;
     if (!isNull(form.status?.value)) employee.status = form.status.value === 1;
-
+    
+    if(this.props.searchParams) this.setSearchParams(employee);
     this.props.queryEmployee(employee);
     if (this.state.isAdd) this.resetForm();
+  }
+
+  // Set search parameters after search submission
+  setSearchParams(employee) {
+    const searchedEmployee = employee;
+    if(!isNull(searchedEmployee.dateOfJoining)) {
+      const form = document.forms[this.props.actionType];
+      searchedEmployee.dateOfJoining = form.dateOfJoining.value;
+    }
+    this.props.setSearchParams(Object.entries(searchedEmployee));
   }
 
   resetForm() {
@@ -86,14 +120,9 @@ export default class EmployeeForm extends React.Component {
     removeIsInvalid(`${this.props.actionType}-lastName`);
   }
 
-  formatDate(date) {
-    if(isNull(date)) return '';
-    return date.getFullYear() + "-" + (date.getMonth()+1).toString().padStart(2, "0") + "-" + date.getDate().toString().padStart(2, "0");
-  }
-
   render() {
     const actionType = this.props.actionType;
-    const employeeDetails = this.props.employeeDetails;
+    const employeeDetails = this.props.employeeDetails || parseSearchParamsToObject(this.props.searchParams);
 
     const isAdd = this.state.isAdd;
     const isSearch = this.state.isSearch;
@@ -118,7 +147,7 @@ export default class EmployeeForm extends React.Component {
         onSubmit={this.handleSubmit}
       >
         <div>
-          <input type="hidden" name="id" defaultValue={(isUpdate || isDetails) ? employeeDetails?.id: ''}/>
+          <input type="hidden" name="id" defaultValue={employeeDetails?.id || ''}/>
           <label htmlFor="firstName">First Name</label>
           <input
             type="text"
@@ -126,7 +155,7 @@ export default class EmployeeForm extends React.Component {
             id={`${actionType}-firstName`}
             placeholder="John"
             required={isAdd}
-            defaultValue={(isUpdate || isDetails) ? employeeDetails?.firstName: ''}
+            defaultValue={employeeDetails?.firstName || ''}
             readOnly={isUpdate || isDetails}
           />
           {isAdd && (<div>First Name should have at least 2 characters.</div>)}
@@ -141,7 +170,7 @@ export default class EmployeeForm extends React.Component {
             id={`${actionType}-lastName`}
             placeholder="Smith"
             required={isAdd}
-            defaultValue={(isUpdate || isDetails) ? employeeDetails?.lastName: ''}
+            defaultValue={employeeDetails?.lastName || ''}
             readOnly={isUpdate || isDetails}
             />
           {isAdd && (<div>Last Name should have at least 2 characters.</div>)}
@@ -158,7 +187,7 @@ export default class EmployeeForm extends React.Component {
             min={20}
             max={70}
             required={isAdd}
-            defaultValue={(isUpdate || isDetails) ? employeeDetails?.age: ''}
+            defaultValue={employeeDetails?.age || ''}
             readOnly={isUpdate || isDetails}
           />
           {isAdd && (<div>Age must be between 20 and 70.</div>)}
@@ -172,7 +201,7 @@ export default class EmployeeForm extends React.Component {
             id={`${actionType}-dateOfJoining`}
             placeholder="mm/dd/yyyy"
             required={isAdd}
-            defaultValue={(isUpdate || isDetails) ? this.formatDate(employeeDetails?.dateOfJoining) : ''}
+            defaultValue={formatDate(employeeDetails?.dateOfJoining)}
             readOnly={isUpdate || isDetails}
           />
         </div>

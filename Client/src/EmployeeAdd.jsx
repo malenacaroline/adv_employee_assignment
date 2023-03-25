@@ -1,7 +1,7 @@
 import React from 'react';
 import EmployeeForm from "./EmployeeForm.jsx";
 import graphQLFetch from './graphQLFetch.js';
-import { withRouter } from './utils.jsx';
+import { withRouter } from './withRouter.jsx';
 
 class EmployeeAdd extends React.Component {
   constructor(props) {

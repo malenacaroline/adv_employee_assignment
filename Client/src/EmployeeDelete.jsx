@@ -1,6 +1,6 @@
 import React from 'react';
 import graphQLFetch from './graphQLFetch.js';
-import { withRouter } from './utils.jsx';
+import { withRouter } from './withRouter.jsx';
 
 class EmployeeDelete extends React.Component {
   constructor(props) {
