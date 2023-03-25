@@ -1,6 +1,6 @@
 import React from 'react';
 import graphQLFetch from './graphQLFetch.js';
-import { withRouter } from './withRouter.jsx';
+import withRouter from './withRouter.jsx';
 
 class EmployeeDelete extends React.Component {
   constructor(props) {
@@ -16,12 +16,11 @@ class EmployeeDelete extends React.Component {
       }
     }`;
 
-    try{
-      await graphQLFetch(query, {id});
+    try {
+      await graphQLFetch(query, { id });
       alert("User deleted successfully");
       this.props.navigate("/employees/");
-    } catch(error) {
-      console.log(error);
+    } catch (error) {
       alert("Error deleting employee");
     }
   }
@@ -33,7 +32,7 @@ class EmployeeDelete extends React.Component {
         <div>Do you want to delete this employee?</div>
         <div>
           <button onClick={this.deleteEmployee}>Delete Employee</button>
-          <button onClick={()=> this.props.navigate("/employees")}>Cancel</button>
+          <button onClick={() => this.props.navigate("/employees")}>Cancel</button>
         </div>
       </div>
     );

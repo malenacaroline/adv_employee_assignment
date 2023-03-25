@@ -2,7 +2,7 @@ import React from 'react';
 import EmployeeSearch from "./EmployeeSearch.jsx";
 import EmployeeTable from "./EmployeeTable.jsx";
 import graphQLFetch from './graphQLFetch.js';
-import { withRouter } from './withRouter.jsx';
+import withRouter from './withRouter.jsx';
 
 class EmployeeList extends React.Component {
   constructor() {
@@ -12,7 +12,7 @@ class EmployeeList extends React.Component {
   }
 
   componentDidMount() {
-    if(this.props.searchParams?.toString()) return;
+    if (this.props.searchParams?.toString()) return;
     this.loadData();
   }
 
@@ -40,10 +40,10 @@ class EmployeeList extends React.Component {
       <React.Fragment>
         <h1>Employee Management System</h1>
         <div className="container">
-          <EmployeeSearch 
+          <EmployeeSearch
             queryEmployee={this.loadData}
             searchParams={this.props.searchParams}
-            setSearchParams={this.props.setSearchParams} 
+            setSearchParams={this.props.setSearchParams}
           />
           <EmployeeTable employees={this.state.employees} />
         </div>

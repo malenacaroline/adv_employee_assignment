@@ -1,6 +1,7 @@
 import React from 'react';
 import EmployeeForm from "./EmployeeForm.jsx";
 import graphQLFetch from './graphQLFetch.js';
+
 export default class EmployeeUpdate extends React.Component {
   constructor(props) {
     super(props);
@@ -14,15 +15,15 @@ export default class EmployeeUpdate extends React.Component {
       }
     }`;
 
-    try{
-      await graphQLFetch(query, {employee});
+    try {
+      await graphQLFetch(query, { employee });
       alert("User updated successfully");
       this.props.navigate("/employees");
-    } catch(error) {
-      console.log(error);
+    } catch (error) {
       alert("Error updating employee");
     }
   }
+
   render() {
     return (
       <div>

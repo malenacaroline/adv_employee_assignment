@@ -1,5 +1,5 @@
 const { UserInputError } = require('apollo-server-express');
-const { getDb, getNextSequence } = require('./db.js');
+const { getDb, getNextSequence } = require('./db');
 
 function employeeValidate(employee) {
   const errors = [];
@@ -43,7 +43,7 @@ async function addEmployee(_, { employee }) {
 
 async function updateEmployee(_, { employee }) {
   const db = getDb();
-  const updatedEmployee = await db.collection("employees").updateOne({ "id": employee.id }, {$set: { "title": employee.title, "department": employee.department, "status": employee.status }});
+  const updatedEmployee = await db.collection("employees").updateOne({ id: employee.id }, { $set: { title: employee.title, department: employee.department, status: employee.status } });
   return updatedEmployee;
 }
 
@@ -53,4 +53,10 @@ async function deleteEmployee(_, { id }) {
   return deletedEmployee;
 }
 
-module.exports = { employeeList, employeeDetails, addEmployee, updateEmployee, deleteEmployee };
+module.exports = {
+  employeeList,
+  employeeDetails,
+  addEmployee,
+  updateEmployee,
+  deleteEmployee,
+};

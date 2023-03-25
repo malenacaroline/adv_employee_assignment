@@ -2,13 +2,13 @@ const fs = require('fs');
 require('dotenv').config();
 const { ApolloServer } = require('apollo-server-express');
 
-const GraphQLDate = require('./graphql_date.js');
+const GraphQLDate = require('./graphql_date');
 const employee = require('./employee');
 
 const resolvers = {
   Query: {
     employeeList: employee.employeeList,
-    employeeDetails: employee.employeeDetails
+    employeeDetails: employee.employeeDetails,
   },
   Mutation: {
     addEmployee: employee.addEmployee,

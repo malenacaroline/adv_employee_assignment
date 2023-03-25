@@ -1,7 +1,7 @@
 import React from 'react';
 import EmployeeForm from "./EmployeeForm.jsx";
 import graphQLFetch from './graphQLFetch.js';
-import { withRouter } from './withRouter.jsx';
+import withRouter from './withRouter.jsx';
 
 class EmployeeAdd extends React.Component {
   constructor(props) {
@@ -16,12 +16,11 @@ class EmployeeAdd extends React.Component {
       }
     }`;
 
-    try{
-      await graphQLFetch(query, {employee});
+    try {
+      await graphQLFetch(query, { employee });
       alert("User created successfully");
       this.props.navigate("/employees/");
-    } catch(error) {
-      console.log(error);
+    } catch (error) {
       alert("Error creating employee");
     }
   }

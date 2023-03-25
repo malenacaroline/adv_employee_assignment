@@ -8,20 +8,22 @@ const addIsInvalid = id => document.getElementById(id).nextElementSibling.classL
 // Remove is-invalid class when field is no more invalid
 const removeIsInvalid = id => document.getElementById(id).nextElementSibling.classList.remove("error");
 
-// Format date to input 
-const formatDate = date => {
-  if(isNull(date)) return '';
-  return new Date(date).toISOString().slice(0,10);
- }
- // Convert URLSearchParams into Object
- const parseSearchParamsToObject = searchParams => {
-  if(isNull(searchParams)) return;
-  const result = {}
-  for(const [key, value] of searchParams.entries()) result[key] = value;
-  if(!isNull(result.age)) result.age = Number(result.age);
-  if(!isNull(result.dateOfJoining)) result.dateOfJoining = new Date(result.dateOfJoining).toISOString();
+// Format date to input
+const formatDate = (date) => {
+  if (isNull(date)) return '';
+  return new Date(date).toISOString().slice(0, 10);
+};
+// Convert URLSearchParams into Object
+const parseSearchParamsToObject = (searchParams) => {
+  if (isNull(searchParams)) return undefined;
+  const result = {};
+  for (const [key, value] of searchParams.entries()) result[key] = value;
+  if (!isNull(result.age)) result.age = Number(result.age);
+  if (!isNull(result.dateOfJoining)) {
+    result.dateOfJoining = new Date(result.dateOfJoining).toISOString();
+  }
   return result;
-}
+};
 
 
 export default class EmployeeForm extends React.Component {
@@ -44,14 +46,13 @@ export default class EmployeeForm extends React.Component {
   // Perform search query when there are search parameters
   componentDidMount() {
     const employeeSearchParams = parseSearchParamsToObject(this.props.searchParams);
-    if(isNull(employeeSearchParams)) return;
+    if (isNull(employeeSearchParams)) return;
     this.props.queryEmployee(employeeSearchParams);
   }
 
   isValid() {
     this.resetError();
     let hasErrors = false;
-    
     const form = document.forms[this.props.actionType];
     const firstName = form.firstName.value;
     const lastName = form.lastName.value;
@@ -73,7 +74,6 @@ export default class EmployeeForm extends React.Component {
     e.preventDefault();
     const form = document.forms[this.props.actionType];
     if (this.state.isAdd && !this.isValid()) return;
-    
     const employee = {};
     if (!isNull(form.id.value)) employee.id = Number(form.id.value);
     if (!isNull(form.firstName.value)) employee.firstName = form.firstName.value;
@@ -86,8 +86,7 @@ export default class EmployeeForm extends React.Component {
     if (!isNull(form.department.value)) employee.department = form.department.value;
     if (!isNull(form.type.value)) employee.type = form.type.value;
     if (!isNull(form.status?.value)) employee.status = form.status.value === 1;
-    
-    if(this.props.searchParams) this.setSearchParams(employee);
+    if (this.props.searchParams) this.setSearchParams(employee);
     this.props.queryEmployee(employee);
     if (this.state.isAdd) this.resetForm();
   }
@@ -95,7 +94,7 @@ export default class EmployeeForm extends React.Component {
   // Set search parameters after search submission
   setSearchParams(employee) {
     const searchedEmployee = employee;
-    if(!isNull(searchedEmployee.dateOfJoining)) {
+    if (!isNull(searchedEmployee.dateOfJoining)) {
       const form = document.forms[this.props.actionType];
       searchedEmployee.dateOfJoining = form.dateOfJoining.value;
     }
@@ -121,24 +120,27 @@ export default class EmployeeForm extends React.Component {
   }
 
   render() {
-    const actionType = this.props.actionType;
-    const employeeDetails = this.props.employeeDetails || parseSearchParamsToObject(this.props.searchParams);
+    const { actionType } = this.props;
+    const {
+      isAdd,
+      isSearch,
+      isDetails,
+      isUpdate,
+    } = this.state;
 
-    const isAdd = this.state.isAdd;
-    const isSearch = this.state.isSearch;
-    const isDetails = this.state.isDetails;
-    const isUpdate = this.state.isUpdate;
+    const employeeDetails = this.props.employeeDetails
+    || parseSearchParamsToObject(this.props.searchParams);
 
     let actionLabel = "";
-    if(isAdd) {
+    if (isAdd) {
       actionLabel = "Add";
-    } else if (isSearch){
+    } else if (isSearch) {
       actionLabel = "Search";
     } else {
       actionLabel = "Update";
     }
 
-    if((!employeeDetails && (isUpdate || isDetails))) return;
+    if ((!employeeDetails && (isUpdate || isDetails))) return null;
 
     return (
       <form
@@ -247,7 +249,7 @@ export default class EmployeeForm extends React.Component {
             name="type"
             id={`${actionType}-type`}
             aria-label="label for type select"
-            required={isAdd}           
+            required={isAdd}
             defaultValue={employeeDetails?.type || ''}
             disabled={isUpdate || isDetails}
           >
