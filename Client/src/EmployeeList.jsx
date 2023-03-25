@@ -11,9 +11,11 @@ class EmployeeList extends React.Component {
     this.loadData = this.loadData.bind(this);
   }
 
-  componentDidMount() {
+  componentDidUpdate(prevProps) {
     if (this.props.searchParams?.toString()) return;
-    this.loadData();
+    const hasSearchParamsChanged = prevProps.searchParams?.toString()
+    !== this.props.searchParams?.toString();
+    if (hasSearchParamsChanged) this.loadData();
   }
 
   async loadData(employee) {
